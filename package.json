@@ -2,7 +2,7 @@
   "name": "get-set-fetch",
   "version": "0.1.0",
   "description": "web crawler, parser and scraper with storage capabilities",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "lint": "eslint ./src ./test",
     "test": "mocha test/**/*.js"
