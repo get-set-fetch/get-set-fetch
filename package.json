@@ -4,6 +4,7 @@
   "description": "web crawler, parser and scraper with storage capabilities",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint ./src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,5 +26,10 @@
   "bugs": {
     "url": "https://github.com/get-set-fetch/get-set-fetch/issues"
   },
-  "homepage": "https://github.com/get-set-fetch/get-set-fetch#readme"
+  "homepage": "https://github.com/get-set-fetch/get-set-fetch#readme",
+  "devDependencies": {
+    "eslint": "^4.18.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
+  }
 }
