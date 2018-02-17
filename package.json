@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint ./src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -28,9 +28,11 @@
   },
   "homepage": "https://github.com/get-set-fetch/get-set-fetch#readme",
   "devDependencies": {
+    "chai": "^4.1.2",
     "eslint": "^4.18.0",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0"
+    "eslint-plugin-import": "^2.8.0",
+    "mocha": "^5.0.1"
   },
   "dependencies": {
     "murmurhash-js": "^1.0.0"
