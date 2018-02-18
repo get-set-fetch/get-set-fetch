@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+    mongo:
+        image: mongo:3.4.10-jessie
+        ports:
+            - 27027:27017 # host: container
+        networks:
+            testntwk:
+                ipv4_address: 192.168.50.1
+
+networks:
+    testntwk:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+            - subnet: 192.168.50.0/16
+              gateway: 192.168.50.0
+
+         
+        

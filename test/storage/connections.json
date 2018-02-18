@@ -7,5 +7,10 @@
     "connection": {
         "filename": ":memory:"
     }
+  },
+  {
+    "info": "mongoDB",
+    "url": "mongodb://localhost:27027",
+    "dbName": "get-set-fetch-test"
   }
 ]

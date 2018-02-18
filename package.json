@@ -6,8 +6,10 @@
   "scripts": {
     "clean": "rm -rf ./coverage",
     "lint": "eslint ./src ./test",
+    "pretest": "docker-compose -f ./test/docker/docker-compose.yml up -d",
     "test": "nyc --reporter=lcov mocha --recursive",
-    "test:report": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "test:report": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "posttest": "docker-compose -f ./test/docker/docker-compose.yml down"
   },
   "repository": {
     "type": "git",
