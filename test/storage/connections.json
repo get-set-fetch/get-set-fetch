@@ -1,0 +1,11 @@
+[
+  {
+    "info": "knex with sqlite3 in memory",
+    "client": "sqlite3",
+    "useNullAsDefault": true,
+    "debug": false,
+    "connection": {
+        "filename": ":memory:"
+    }
+  }
+]
