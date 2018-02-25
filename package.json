@@ -44,6 +44,7 @@
     "sqlite3": "^3.1.13"
   },
   "dependencies": {
+    "jsdom": "^11.6.2",
     "murmurhash-js": "^1.0.0"
   }
 }
