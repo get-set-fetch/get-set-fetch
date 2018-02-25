@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /*.html
+Disallow: /*.php
+Disallow: /suba/*.php3
+Disallow: /end/*.txt$
+Allow: /end/*

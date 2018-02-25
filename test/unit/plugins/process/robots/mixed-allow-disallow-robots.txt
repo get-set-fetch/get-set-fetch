@@ -1,0 +1,5 @@
+User-Agent: *
+Disallow: /suba
+Disallow: /root.html
+Allow: /suba/specific/
+Allow: /root.html

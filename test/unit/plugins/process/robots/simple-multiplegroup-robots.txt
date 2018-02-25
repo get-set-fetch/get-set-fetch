@@ -1,0 +1,8 @@
+User-Agent: a
+User-Agent: b
+Allow: *
+Crawl-Delay: 10
+
+User-Agent: c
+Allow: /c
+Crawl-Delay: 5

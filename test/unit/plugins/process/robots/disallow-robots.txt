@@ -1,0 +1,4 @@
+User-Agent: *
+Disallow: /suba
+Disallow: /root.html
+Disallow: /suba/subc
