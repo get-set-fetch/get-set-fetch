@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const connections = require.main.require('test/config/connections.json');
 const TestUtils = require.main.require('test/utils/TestUtils');
-const Storage = require.main.require('lib/storage/Storage');
+const GetSetFetch = require.main.require('lib/index.js');
 
 connections.forEach((conn) => {
   /*
@@ -20,7 +20,7 @@ connections.forEach((conn) => {
     let site = null;
 
     before(async () => {
-      ({ Site } = await Storage.init(conn));
+      ({ Site } = await GetSetFetch.init(conn));
     });
 
     beforeEach(async () => {
@@ -40,7 +40,7 @@ connections.forEach((conn) => {
     });
 
     after(() => {
-      Storage.close();
+      GetSetFetch.close();
     });
 
     it('crawl resource - index.html, 1st page, depth 0', async () => {
