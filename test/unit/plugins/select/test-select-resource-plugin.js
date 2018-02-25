@@ -1,4 +1,3 @@
-// require('chai/register-assert');
 const chai = require('chai');
 const spies = require('chai-spies');
 
