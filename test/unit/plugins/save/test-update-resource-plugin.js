@@ -5,7 +5,7 @@ chai.use(spies);
 
 const UpdateResourcePlugin = require.main.require('lib/plugins/save/UpdateResourcePlugin');
 
-describe('Test NodeFetchPlugin', () => {
+describe('Test UpdateResourcePlugin', () => {
   let updateResourcePlugin = null;
 
   beforeEach(() => {
