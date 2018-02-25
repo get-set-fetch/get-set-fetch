@@ -1,6 +1,6 @@
 require('chai/register-assert');
-const connections = require('./connections.json');
 
+const connections = require.main.require('test/config/connections.json');
 const Storage = require.main.require('lib/storage/Storage');
 
 connections.forEach((conn) => {
