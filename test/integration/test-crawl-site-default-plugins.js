@@ -125,23 +125,5 @@ connections.forEach((conn) => {
       const newResource = await site.getResourceToCrawl();
       assert.isNull(newResource);
     });
-
-    xit('crawl resource - pageB.html, 3rd page, depth 2', async () => {
-      /*
-      to do:
-      fix ignored test
-
-      add maxDepth as a measure of limiting crawl resources
-
-      BaseSite should have both: crawl and crawlResource
-      add saveFiles2Disk plugin
-      save plugins + options on storage site site
-
-      implement + test recovering from various errors
-
-      configure params to bloom filter
-      */
-      throw (new Error('not implemented!'));
-    });
   });
 });
