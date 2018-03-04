@@ -1,3 +1,6 @@
+.backups
+.test/tmp
+
 # Logs
 logs
 *.log
