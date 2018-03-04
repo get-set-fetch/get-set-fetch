@@ -1,6 +1,6 @@
 {
   "name": "get-set-fetch",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "web crawler, parser and scraper with storage capabilities",
   "main": "lib/index.js",
   "scripts": {
