@@ -125,12 +125,39 @@ describe('Test ExtractUrlPlugin', () => {
     });
   });
 
-  it('extract links: only "image" resources', () => {
+  it('extract links: only "image" resources from anchor tags', () => {
     const htmlContent =
       '<body>' +
         "<a href='img1.gif'>a1</a>" +
         "<a href='img2.png'>a1</a>" +
         "<a href='img3.jpg'>a1</a>" +
+        "<a href='/page2'>a2</a>" +
+        "<a href='/page3.html'>a3</a>" +
+        "<a href='/page4.php'>a4</a>" +
+      '</body>';
+
+    extractUrlPlugin.opts.extensionRe = /^(gif|png|jpg|jpeg|jpe)$/i;
+    extractUrlPlugin.opts.allowNoExtension = false;
+
+    const extractedUrls = extractUrlPlugin.extractResourceUrls(site, {
+      url: 'http://site.com/index.html',
+      document: jsDomPlugin.genDocument({ rawData: htmlContent }),
+    });
+    assert.strictEqual(3, extractedUrls.length);
+
+    const expectedLinks = ['http://site.com/img1.gif', 'http://site.com/img2.png', 'http://site.com/img3.jpg'];
+    expectedLinks.forEach((expectedLink) => {
+      assert.include(extractedUrls, expectedLink);
+    });
+  });
+
+  it('extract links: only "image" resources from img tags', () => {
+    const htmlContent =
+      '<body>' +
+        "<img src='img1.gif'/>" +
+        "<img src='img2.png'/>" +
+        "<img src='img3.jpg'/>" +
+        "<img src='img4.unknown'/>" +
         "<a href='/page2'>a2</a>" +
         "<a href='/page3.html'>a3</a>" +
         "<a href='/page4.php'>a4</a>" +
