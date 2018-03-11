@@ -1,7 +1,7 @@
 require('chai/register-assert');
 
-const ExtractUrlPlugin = require.main.require('lib/plugins/process/ExtractUrlPlugin');
-const JsDomPlugin = require.main.require('lib/plugins/process/JsDomPlugin');
+const ExtractUrlPlugin = gsfRequire('lib/plugins/process/ExtractUrlPlugin');
+const JsDomPlugin = gsfRequire('lib/plugins/process/JsDomPlugin');
 
 describe('Test ExtractUrlPlugin', () => {
   let extractUrlPlugin = null;

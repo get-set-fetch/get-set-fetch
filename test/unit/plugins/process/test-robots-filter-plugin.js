@@ -1,7 +1,7 @@
 require('chai/register-assert');
 const fs = require('fs');
 
-const RobotsFilterPlugin = require.main.require('lib/plugins/process/RobotsFilterPlugin');
+const RobotsFilterPlugin = gsfRequire('lib/plugins/process/RobotsFilterPlugin');
 
 describe('Test RobotsFilterPlugin', () => {
   let rfp = null;

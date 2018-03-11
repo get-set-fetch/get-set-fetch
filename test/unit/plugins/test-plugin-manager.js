@@ -1,7 +1,7 @@
 require('chai/register-assert');
 
-const PluginManager = require.main.require('lib/plugins/PluginManager');
-const SelectResourcePlugin = require.main.require('lib/plugins/select/SelectResourcePlugin');
+const PluginManager = gsfRequire('lib/plugins/PluginManager');
+const SelectResourcePlugin = gsfRequire('lib/plugins/select/SelectResourcePlugin');
 
 describe('Test Plugin Manager', () => {
   beforeEach(() => {

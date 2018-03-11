@@ -3,7 +3,7 @@ const spies = require('chai-spies');
 
 chai.use(spies);
 
-const SelectResourcePlugin = require.main.require('lib/plugins/select/SelectResourcePlugin');
+const SelectResourcePlugin = gsfRequire('lib/plugins/select/SelectResourcePlugin');
 
 describe('Test NodeFetchPlugin', () => {
   let selectResourcePlugin = null;

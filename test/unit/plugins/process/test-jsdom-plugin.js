@@ -1,6 +1,6 @@
 require('chai/register-assert');
 
-const JsDomPlugin = require.main.require('lib/plugins/process/JsDomPlugin');
+const JsDomPlugin = gsfRequire('lib/plugins/process/JsDomPlugin');
 
 describe('Test JsDomPlugin', () => {
   let jsDomPlugin = null;

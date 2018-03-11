@@ -1,6 +1,6 @@
 require('chai/register-assert');
 
-const BloomFilter = require.main.require('lib/filters/bloom/BloomFilter');
+const BloomFilter = gsfRequire('lib/filters/bloom/BloomFilter');
 
 describe('Test Bloom Filter', () => {
   it('generate based on maxEntries and probability', () => {

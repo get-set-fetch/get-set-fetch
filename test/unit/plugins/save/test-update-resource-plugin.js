@@ -3,7 +3,7 @@ const spies = require('chai-spies');
 
 chai.use(spies);
 
-const UpdateResourcePlugin = require.main.require('lib/plugins/save/UpdateResourcePlugin');
+const UpdateResourcePlugin = gsfRequire('lib/plugins/save/UpdateResourcePlugin');
 
 describe('Test UpdateResourcePlugin', () => {
   let updateResourcePlugin = null;

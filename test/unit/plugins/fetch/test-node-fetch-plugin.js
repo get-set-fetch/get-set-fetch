@@ -1,7 +1,7 @@
 require('chai/register-assert');
 const nock = require('nock');
 
-const NodeFetchPlugin = require.main.require('lib/plugins/fetch/NodeFetchPlugin');
+const NodeFetchPlugin = gsfRequire('lib/plugins/fetch/NodeFetchPlugin');
 
 describe('Test NodeFetchPlugin', () => {
   let nodeFetchPlugin = null;

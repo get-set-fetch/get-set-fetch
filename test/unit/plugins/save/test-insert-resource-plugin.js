@@ -3,7 +3,7 @@ const spies = require('chai-spies');
 
 chai.use(spies);
 
-const InsertResourcePlugin = require.main.require('lib/plugins/save/InsertResourcePlugin');
+const InsertResourcePlugin = gsfRequire('lib/plugins/save/InsertResourcePlugin');
 
 describe('Test InsertResourcePlugin', () => {
   let insertResourcePlugin = null;

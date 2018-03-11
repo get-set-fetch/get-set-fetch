@@ -1,9 +1,9 @@
 require('chai/register-assert');
 
-const connections = require.main.require('test/config/connections.json');
-const Storage = require.main.require('lib/storage/Storage');
-const BasePlugin = require.main.require('lib/plugins/base/BasePlugin');
-const PluginManager = require.main.require('lib/plugins/PluginManager');
+const connections = gsfRequire('test/config/connections.json');
+const Storage = gsfRequire('lib/storage/Storage');
+const BasePlugin = gsfRequire('lib/plugins/base/BasePlugin');
+const PluginManager = gsfRequire('lib/plugins/PluginManager');
 
 connections.forEach((conn) => {
   describe(`Test Storage Site Plugins - CRUD, using connection ${conn.info}`, () => {

@@ -1,9 +1,9 @@
 require('chai/register-assert');
 const fs = require('fs');
 
-const connections = require.main.require('test/config/connections.json');
-const TestUtils = require.main.require('test/utils/TestUtils');
-const GetSetFetch = require.main.require('lib/index.js');
+const connections = gsfRequire('test/config/connections.json');
+const TestUtils = gsfRequire('test/utils/TestUtils');
+const GetSetFetch = gsfRequire('lib/index.js');
 
 connections.forEach((conn) => {
   /*

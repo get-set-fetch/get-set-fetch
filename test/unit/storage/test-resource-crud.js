@@ -1,8 +1,8 @@
 require('chai/register-assert');
 
-const connections = require.main.require('test/config/connections.json');
+const connections = gsfRequire('test/config/connections.json');
 
-const Storage = require.main.require('lib/storage/Storage');
+const Storage = gsfRequire('lib/storage/Storage');
 
 connections.forEach((conn) => {
   describe(`Test Storage Resource - CRUD, using connection ${conn.info}`, () => {
