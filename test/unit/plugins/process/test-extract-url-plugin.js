@@ -25,7 +25,7 @@ describe('Test ExtractUrlPlugin', () => {
 
     const extractedUrls = extractUrlPlugin.extractResourceUrls(site, {
       url: 'http://site.com/index.html',
-      document: jsDomPlugin.genDocument({ rawData: htmlContent }),
+      document: jsDomPlugin.genDocument({ content: htmlContent }),
     });
     assert.strictEqual(4, extractedUrls.length);
 
@@ -53,7 +53,7 @@ describe('Test ExtractUrlPlugin', () => {
 
     const extractedUrls = extractUrlPlugin.extractResourceUrls(site, {
       url: 'http://site.com/dir1/subPage.html',
-      document: jsDomPlugin.genDocument({ rawData: htmlContent }),
+      document: jsDomPlugin.genDocument({ content: htmlContent }),
     });
     assert.strictEqual(6, extractedUrls.length);
 
@@ -80,7 +80,7 @@ describe('Test ExtractUrlPlugin', () => {
 
     const extractedUrls = extractUrlPlugin.extractResourceUrls(site, {
       url: 'http://site.com/index.html',
-      document: jsDomPlugin.genDocument({ rawData: htmlContent }),
+      document: jsDomPlugin.genDocument({ content: htmlContent }),
     });
     assert.strictEqual(0, extractedUrls.length);
   });
@@ -94,7 +94,7 @@ describe('Test ExtractUrlPlugin', () => {
 
     const extractedUrls = extractUrlPlugin.extractResourceUrls(site, {
       url: 'http://site.com/index.html',
-      document: jsDomPlugin.genDocument({ rawData: htmlContent }),
+      document: jsDomPlugin.genDocument({ content: htmlContent }),
     });
     assert.strictEqual(1, extractedUrls.length);
 
@@ -115,7 +115,7 @@ describe('Test ExtractUrlPlugin', () => {
 
     const extractedUrls = extractUrlPlugin.extractResourceUrls(site, {
       url: 'http://site.com/index.html',
-      document: jsDomPlugin.genDocument({ rawData: htmlContent }),
+      document: jsDomPlugin.genDocument({ content: htmlContent }),
     });
     assert.strictEqual(3, extractedUrls.length);
 
@@ -141,7 +141,7 @@ describe('Test ExtractUrlPlugin', () => {
 
     const extractedUrls = extractUrlPlugin.extractResourceUrls(site, {
       url: 'http://site.com/index.html',
-      document: jsDomPlugin.genDocument({ rawData: htmlContent }),
+      document: jsDomPlugin.genDocument({ content: htmlContent }),
     });
     assert.strictEqual(3, extractedUrls.length);
 
@@ -168,7 +168,7 @@ describe('Test ExtractUrlPlugin', () => {
 
     const extractedUrls = extractUrlPlugin.extractResourceUrls(site, {
       url: 'http://site.com/index.html',
-      document: jsDomPlugin.genDocument({ rawData: htmlContent }),
+      document: jsDomPlugin.genDocument({ content: htmlContent }),
     });
     assert.strictEqual(3, extractedUrls.length);
 
@@ -195,7 +195,7 @@ describe('Test ExtractUrlPlugin', () => {
 
     const extractedUrls = extractUrlPlugin.extractResourceUrls(site, {
       url: 'http://site.com/index.html',
-      document: jsDomPlugin.genDocument({ rawData: htmlContent }),
+      document: jsDomPlugin.genDocument({ content: htmlContent }),
     });
     assert.strictEqual(0, extractedUrls.length);
   });

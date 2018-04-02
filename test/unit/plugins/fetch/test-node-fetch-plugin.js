@@ -12,20 +12,20 @@ describe('Test NodeFetchPlugin', () => {
 
   it('http fetch default port', async () => {
     nock('http://www.site.com').get('/pageA').reply(200, 'httpA');
-    const { rawData } = await nodeFetchPlugin.fetch({ url: 'http://www.site.com/pageA' });
-    assert.strictEqual('httpA', rawData);
+    const { content } = await nodeFetchPlugin.fetch({ url: 'http://www.site.com/pageA' });
+    assert.strictEqual('httpA', content);
   });
 
   it('http fetch custom port', async () => {
     nock('http://www.site.com:8090').get('/pageA').reply(200, 'httpA-8090');
-    const { rawData } = await nodeFetchPlugin.fetch({ url: 'http://www.site.com:8090/pageA' });
-    assert.strictEqual('httpA-8090', rawData);
+    const { content } = await nodeFetchPlugin.fetch({ url: 'http://www.site.com:8090/pageA' });
+    assert.strictEqual('httpA-8090', content);
   });
 
   it('https fetch default port', async () => {
     nock('https://www.site.com').get('/pageA').reply(200, 'httspA');
-    const { rawData } = await nodeFetchPlugin.fetch({ url: 'https://www.site.com/pageA' });
-    assert.strictEqual('httspA', rawData);
+    const { content } = await nodeFetchPlugin.fetch({ url: 'https://www.site.com/pageA' });
+    assert.strictEqual('httspA', content);
   });
 
   it('http fetch user agent', async () => {
@@ -38,7 +38,7 @@ describe('Test NodeFetchPlugin', () => {
       reqHeaders: { 'User-Agent': userAgent },
     };
 
-    const { rawData } = await nodeFetchPlugin.fetch({ url: 'http://www.site.com/pageA' });
-    assert.strictEqual('httpA', rawData);
+    const { content } = await nodeFetchPlugin.fetch({ url: 'http://www.site.com/pageA' });
+    assert.strictEqual('httpA', content);
   });
 });
