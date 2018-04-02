@@ -8,6 +8,7 @@
     "lint": "eslint ./src ./test",
     "pretest": "docker-compose -f ./test/docker/docker-compose.yml up -d",
     "test": "nyc --reporter=lcov mocha test --recursive --require ./test/utils/TestUtils.js",
+    "test:single": "mocha test --grep \"storage init\" --recursive --require ./test/utils/TestUtils.js",
     "test:report": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "posttest": "docker-compose -f ./test/docker/docker-compose.yml down"
   },
