@@ -41,7 +41,7 @@ connections.forEach((conn) => {
       await site.save();
 
       // configure nock to serve fs files
-      TestUtils.fs2http('test/integration/crawl-site-default-and-persistence-plugin', 'http://www.site1.com');
+      TestUtils.fs2http(path.join('test', 'integration', 'crawl-site-default-and-persistence-plugin'), 'http://www.site1.com');
 
       // fetch and save robots.txt
       await site.fetchRobots();

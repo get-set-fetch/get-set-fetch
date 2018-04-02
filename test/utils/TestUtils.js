@@ -21,7 +21,8 @@ class TestUtils {
   static fs2http(baseFilePath, baseWebPath) {
     const filePaths = TestUtils.getFilePaths(baseFilePath);
     filePaths.forEach((filePath) => {
-      const filePathSufix = filePath.replace(baseFilePath, '');
+      const filePathSufix = filePath.replace(baseFilePath, '').replace('\\', '/');
+      // console.log(`${baseWebPath + filePathSufix} ${TestUtils.getContentType(path.extname(filePath))}`);
       nock(baseWebPath)
         // .persist()
         .get(filePathSufix).reply(
@@ -47,6 +48,11 @@ class TestUtils {
     for (let i = 0; i < files.length; i += 1) {
       fs.unlinkSync(path.join(dir, files[i]));
     }
+  }
+
+  // remove spaces and header, chrome adds an empty header even if none is present in the original document
+  static sanitize(html) {
+    return html.replace(/<head>.*<\/head>/g, '').replace(/\r?\n|\r|\s+/g, '');
   }
 }
 

@@ -1,5 +1,6 @@
 require('chai/register-assert');
 const fs = require('fs');
+const path = require('path');
 
 const connections = gsfRequire('test/config/connections.json');
 const TestUtils = gsfRequire('test/utils/TestUtils');
@@ -32,7 +33,7 @@ connections.forEach((conn) => {
       await site.save();
 
       // configure nock to serve fs files
-      TestUtils.fs2http('test/integration/crawl-site-default-plugin', 'http://www.site1.com');
+      TestUtils.fs2http(path.join('test', 'integration', 'crawl-site-default-plugin'), 'http://www.site1.com');
 
       // fetch and save robots.txt
       await site.fetchRobots();
@@ -47,8 +48,8 @@ connections.forEach((conn) => {
       // crawl index.html
       const resource = await site.crawlResource();
 
-      // verify resource raw data
-      assert.strictEqual(String(fs.readFileSync('test/integration/crawl-site-default-plugin/index.html')), resource.rawData);
+      // verify resource content
+      assert.strictEqual(String(fs.readFileSync('test/integration/crawl-site-default-plugin/index.html')), resource.content);
 
       // verify jsdom instance
       assert.isFunction(resource.document.querySelectorAll);
@@ -78,8 +79,8 @@ connections.forEach((conn) => {
         resource = await site.crawlResource();
       }
 
-      // verify resource raw data
-      assert.strictEqual(String(fs.readFileSync('test/integration/crawl-site-default-plugin/pageA.html')), resource.rawData);
+      // verify resource content
+      assert.strictEqual(String(fs.readFileSync('test/integration/crawl-site-default-plugin/pageA.html')), resource.content);
 
       // verify jsdom instance
       assert.isFunction(resource.document.querySelectorAll);
@@ -109,8 +110,8 @@ connections.forEach((conn) => {
         resource = await site.crawlResource();
       }
 
-      // verify resource raw data
-      assert.strictEqual(String(fs.readFileSync('test/integration/crawl-site-default-plugin/pageB.html')), resource.rawData);
+      // verify resource content
+      assert.strictEqual(String(fs.readFileSync('test/integration/crawl-site-default-plugin/pageB.html')), resource.content);
 
       // verify jsdom instance
       assert.isFunction(resource.document.querySelectorAll);
