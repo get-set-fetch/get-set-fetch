@@ -57,13 +57,13 @@ connections.forEach((conn) => {
       by default ExtractUrlPlugin only extracts html resources
       overide the default plugin instance with a new one containing suitable options
       */
-      site.use(new GetSetFetch.plugins.ExtractUrlPlugin({ extensionRe: /^(html|png)$/i }));
+      site.addPlugins([new GetSetFetch.plugins.ExtractUrlPlugin({ extensionRe: /^(html|png)$/i })]);
 
       // add persistencePlugin to the current site
-      site.use(new GetSetFetch.plugins.PersistResourcePlugin({
+      site.addPlugins([new GetSetFetch.plugins.PersistResourcePlugin({
         target: targetDir,
         extensionRe: /^png$/i,
-      }));
+      })]);
 
       // crawl the entire site
       await site.crawl();
@@ -79,13 +79,13 @@ connections.forEach((conn) => {
       by default ExtractUrlPlugin only extracts html resources
       overide the default plugin instance with a new one containing suitable options
       */
-      site.use(new GetSetFetch.plugins.ExtractUrlPlugin({ extensionRe: /^(html|png|gif|jpg)$/i }));
+      site.addPlugins([new GetSetFetch.plugins.ExtractUrlPlugin({ extensionRe: /^(html|png|gif|jpg)$/i })]);
 
       // add persistencePlugin to the current site
-      site.use(new GetSetFetch.plugins.PersistResourcePlugin({
+      site.addPlugins([new GetSetFetch.plugins.PersistResourcePlugin({
         target: targetDir,
         extensionRe: /^(png|gif|jpg)$/i,
-      }));
+      })]);
 
       // crawl the entire site
       await site.crawl();
