@@ -19,10 +19,10 @@ connections.forEach((conn) => {
 
       // save site
       const site = new Site('siteA', 'http://siteA');
-      site.plugins = [
+      site.setPlugins([
         new GetSetFetch.plugins.SelectResourcePlugin(),
         new GetSetFetch.plugins.UpdateResourcePlugin(),
-      ];
+      ]);
       await site.save();
     });
 
