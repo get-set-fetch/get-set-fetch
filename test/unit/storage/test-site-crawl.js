@@ -43,17 +43,17 @@ connections.forEach((conn) => {
 
       /*
       re-opening 1 connection(s)
-      resource http://siteA crawled, remaining connections: 0
+      resource http://siteA crawled, connActive: 0
       re-opening 1 connection(s)
-      resource url-1 crawled, remaining connections: 0
+      resource url-1 crawled, connActive: 0
       re-opening 1 connection(s)
-      resource url-2 crawled, remaining connections: 0
+      resource url-2 crawled, connActive: 0
       re-opening 1 connection(s)
-      resource url-3 crawled, remaining connections: 0
+      resource url-3 crawled, connActive: 0
       re-opening 1 connection(s)
-      resource url-4 crawled, remaining connections: 0
+      resource url-4 crawled, connActive: 0
       re-opening 1 connection(s)
-      no resource to crawl found, remaining connections: 0
+      no resource to crawl found, connActive: 0
       */
       sinon.assert.callCount(crawlResourceSpy, 6);
     });
@@ -71,19 +71,17 @@ connections.forEach((conn) => {
 
       /*
       re-opening 2 connection(s)
-      resource http://siteA crawled, remaining connections: 1
-      re-opening 1 connection(s)
-      resource url-1 crawled, remaining connections: 1
-      re-opening 1 connection(s)
-      resource url-2 crawled, remaining connections: 1
-      re-opening 1 connection(s)
-      resource url-3 crawled, remaining connections: 1
-      re-opening 1 connection(s)
-      no resource to crawl found, remaining connections: 1
-      resource url-4 crawled, remaining connections: 0
+      resource http://siteA crawled, connActive: 1
+      resource url-1 crawled, connActive: 0
       re-opening 2 connection(s)
-      no resource to crawl found, remaining connections: 1
-      no resource to crawl found, remaining connections: 0
+      resource url-2 crawled, connActive: 1
+      resource url-3 crawled, connActive: 0
+      re-opening 2 connection(s)
+      no resource to crawl found, connActive: 1
+      resource url-4 crawled, connActive: 0
+      re-opening 2 connection(s)
+      no resource to crawl found, connActive: 1
+      no resource to crawl found, connActive: 0
       */
       sinon.assert.callCount(crawlResourceSpy, 8);
     });
@@ -101,20 +99,17 @@ connections.forEach((conn) => {
 
       /*
       re-opening 3 connection(s)
-      resource http://siteA crawled, remaining connections: 2
-      re-opening 1 connection(s)
-      resource url-1 crawled, remaining connections: 2
-      re-opening 1 connection(s)
-      resource url-2 crawled, remaining connections: 2
-      re-opening 1 connection(s)
-      no resource to crawl found, remaining connections: 2
-      resource url-3 crawled, remaining connections: 1
-      re-opening 2 connection(s)
-      resource url-4 crawled, remaining connections: 2
-      re-opening 1 connection(s)
-      no resource to crawl found, remaining connections: 2
-      no resource to crawl found, remaining connections: 1
-      no resource to crawl found, remaining connections: 0
+      resource http://siteA crawled, connActive: 2, connPending: 1
+      resource url-1 crawled, connActive: 1
+      resource url-2 crawled, connActive: 0
+      re-opening 3 connection(s)
+      no resource to crawl found, connActive: 2
+      resource url-3 crawled, connActive: 1
+      resource url-4 crawled, connActive: 0
+      re-opening 3 connection(s)
+      no resource to crawl found, connActive: 2
+      no resource to crawl found, connActive: 1
+      no resource to crawl found, connActive: 0
       */
       sinon.assert.callCount(crawlResourceSpy, 9);
     });
@@ -135,25 +130,24 @@ connections.forEach((conn) => {
       const crawlResourceStub = sinon.stub(site, 'crawlResource');
 
       // override crawlResource on 2nd call to return null - no resource found
-      crawlResourceStub.onCall(1).returns(new Promise(resolve => setTimeout(resolve(null), 100)));
+      crawlResourceStub.onCall(1).resolves(null);
       crawlResourceStub.callThrough();
 
       await site.crawl({ maxConnections: 2 });
 
       /*
       re-opening 2 connection(s)
-      no resource to crawl found, remaining connections: 1
-      resource http://siteA crawled, remaining connections: 0
+      no resource to crawl found, connActive: 1
+      resource http://siteA crawled, connActive: 0
       re-opening 2 connection(s)
-      resource url-1 crawled, remaining connections: 1
-      re-opening 1 connection(s)
-      resource url-2 crawled, remaining connections: 1
-      re-opening 1 connection(s)
-      no resource to crawl found, remaining connections: 1
-      resource url-3 crawled, remaining connections: 0
+      resource url-1 crawled, connActive: 1
+      resource url-2 crawled, connActive: 0
       re-opening 2 connection(s)
-      no resource to crawl found, remaining connections: 1
-      no resource to crawl found, remaining connections: 0
+      no resource to crawl found, connActive: 1
+      resource url-3 crawled, connActive: 0
+      re-opening 2 connection(s)
+      no resource to crawl found, connActive: 1
+      no resource to crawl found, connActive: 0
       */
       sinon.assert.callCount(crawlResourceStub, 8);
     });
@@ -174,27 +168,25 @@ connections.forEach((conn) => {
       const crawlResourceStub = sinon.stub(site, 'crawlResource');
 
       // override crawlResource on 2nd and 3rd calls to return null - no resource found
-      crawlResourceStub.onCall(1).returns(new Promise(resolve => setTimeout(resolve(null), 100)));
-      crawlResourceStub.onCall(2).returns(new Promise(resolve => setTimeout(resolve(null), 100)));
+      crawlResourceStub.onCall(1).resolves(null);
+      crawlResourceStub.onCall(2).resolves(null);
       crawlResourceStub.callThrough();
 
       await site.crawl({ maxConnections: 3 });
 
       /*
       re-opening 3 connection(s)
-      no resource to crawl found, remaining connections: 2
-      no resource to crawl found, remaining connections: 1
-      resource http://siteA crawled, remaining connections: 0
+      no resource to crawl found, connActive: 2
+      no resource to crawl found, connActive: 1
+      resource http://siteA crawled, connActive: 0
       re-opening 3 connection(s)
-      resource url-1 crawled, remaining connections: 2
-      re-opening 1 connection(s)
-      resource url-2 crawled, remaining connections: 2
-      re-opening 1 connection(s)
-      resource url-3 crawled, remaining connections: 2
-      re-opening 1 connection(s)
-      no resource to crawl found, remaining connections: 2
-      no resource to crawl found, remaining connections: 1
-      no resource to crawl found, remaining connections: 0
+      resource url-1 crawled, connActive: 2
+      resource url-2 crawled, connActive: 1
+      resource url-3 crawled, connActive: 0
+      re-opening 3 connection(s)
+      no resource to crawl found, connActive: 2
+      no resource to crawl found, connActive: 1
+      no resource to crawl found, connActive: 0
       */
       sinon.assert.callCount(crawlResourceStub, 9);
     });
