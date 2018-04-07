@@ -14,6 +14,24 @@ describe('Test ExtractUrlPlugin', () => {
     site = { url: 'http://site.com' };
   });
 
+  it('extract no new links: maxDepth reached', () => {
+    extractUrlPlugin = new ExtractUrlPlugin({ maxDepth: 3 });
+    const htmlContent =
+      '<body>' +
+        "<a href='http://site.com/page1.html'>a1</a>" +
+        "<a href='page2.html'>a2</a>" +
+        "<a href='/a/page3.html'>a3</a>" +
+        "<a href='./b/page4.html'>a3</a>" +
+      '</body>';
+
+    const { urlsToAdd } = extractUrlPlugin.apply(site, {
+      url: 'http://site.com/index.html',
+      document: jsDomPlugin.genDocument({ content: htmlContent }),
+      depth: 3,
+    });
+    assert.strictEqual(0, urlsToAdd.length);
+  });
+
   it('extract links: internal, relative to root path, no subdomains', () => {
     const htmlContent =
       '<body>' +

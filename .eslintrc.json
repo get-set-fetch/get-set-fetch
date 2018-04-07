@@ -12,6 +12,7 @@
     "global-require": "off",
     "max-len": ["error", { "code": 130, "comments": 130 }],
     "checkLoops": false,
-    "no-await-in-loop": "off"
+    "no-await-in-loop": "off",
+    "brace-style": [1, "stroustrup"]
   }
 }

@@ -11,7 +11,8 @@ class TestUtils {
       const stat = fs.statSync(fullPath);
       if (stat && stat.isDirectory()) {
         results = results.concat(TestUtils.getFilePaths(fullPath));
-      } else {
+      }
+      else {
         results.push(fullPath);
       }
     });

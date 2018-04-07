@@ -1,8 +1,11 @@
 const sinon = require('sinon');
+const nock = require('nock');
 
 const connections = gsfRequire('test/config/connections.json');
+const PluginManager = gsfRequire('lib/plugins/PluginManager');
 const Storage = gsfRequire('lib/storage/Storage');
 const GetSetFetch = gsfRequire('lib/index.js');
+
 
 connections.forEach((conn) => {
   describe(`Test Site Crawl, using connection ${conn.info}`, () => {
@@ -18,7 +21,7 @@ connections.forEach((conn) => {
       await Site.delAll();
 
       // save site
-      const site = new Site('siteA', 'http://siteA');
+      const site = new Site('siteA', 'http://siteA/page-0.html');
       site.setPlugins([
         new GetSetFetch.plugins.SelectResourcePlugin(),
         new GetSetFetch.plugins.UpdateResourcePlugin(),
@@ -189,6 +192,57 @@ connections.forEach((conn) => {
       no resource to crawl found, connActive: 0
       */
       sinon.assert.callCount(crawlResourceStub, 9);
+    });
+
+    it('crawl until maxDepth is reached', async () => {
+      const site = await Site.get('siteA');
+
+      // restore site crawling capabilities
+      site.setPlugins(PluginManager.DEFAULT_PLUGINS);
+
+      // mock html pages
+      for (let i = 0; i < 10; i += 1) {
+        nock('http://siteA')
+          .persist()
+          .get(`/page-${i}.html`).reply(
+            200,
+            `<html><body><a href="page-${i + 1}.html">depth ${i + 1}</a></body></html>`,
+            {
+              'Content-Type': 'text/html; charset=utf-8',
+            },
+          );
+      }
+
+      const crawlResourceSpy = sinon.spy(site, 'crawlResource');
+      await site.crawl({ maxDepth: 3 });
+
+      // crawl resources of depth 0-3 + failed attempt returning a null resources indicating the crawling is complete
+      sinon.assert.callCount(crawlResourceSpy, 4 + 1);
+    });
+
+    it('crawl until maxResources is reached', async () => {
+      const site = await Site.get('siteA');
+
+      // restore site crawling capabilities
+      site.setPlugins(PluginManager.DEFAULT_PLUGINS);
+
+      // mock html pages
+      for (let i = 0; i < 10; i += 1) {
+        nock('http://siteA')
+          .persist()
+          .get(`/page-${i}.html`).reply(
+            200,
+            `<html><body><a href="page-${i + 1}.html">depth ${i + 1}</a></body></html>`,
+            {
+              'Content-Type': 'text/html; charset=utf-8',
+            },
+          );
+      }
+
+      const crawlResourceSpy = sinon.spy(site, 'crawlResource');
+      await site.crawl({ maxResources: 7 });
+
+      sinon.assert.callCount(crawlResourceSpy, 7);
     });
   });
 });
