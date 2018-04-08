@@ -41,4 +41,16 @@ describe('Test NodeFetchPlugin', () => {
     const { content } = await nodeFetchPlugin.fetch({ url: 'http://www.site.com/pageA' });
     assert.strictEqual('httpA', content);
   });
+
+  it('returns request headers', async () => {
+    nock('http://www.site.com')
+      .get('/pageA').reply(200, 'httpA', { 'Content-Type': 'text/html; charset=utf-8' });
+
+    nodeFetchPlugin.opts = {
+      reqHeaders: { 'User-Agent': 'myUserAgent' },
+    };
+
+    const { requestHeaders } = await nodeFetchPlugin.fetch({ url: 'http://www.site.com/pageA' });
+    assert.deepEqual(requestHeaders, nodeFetchPlugin.opts.reqHeaders);
+  });
 });
