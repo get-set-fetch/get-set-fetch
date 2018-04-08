@@ -18,20 +18,13 @@ connections.forEach((conn) => {
 
     const targetDir = './test/tmp';
 
-    const emptyDir = (dir) => {
-      const files = fs.readdirSync(dir);
-      for (let i = 0; i < files.length; i += 1) {
-        fs.unlinkSync(path.join(dir, files[i]));
-      }
-    };
-
     before(async () => {
       ({ Site } = await GetSetFetch.init(conn));
     });
 
     beforeEach(async () => {
       // cleanup fs
-      emptyDir(targetDir);
+      TestUtils.emptyDir(targetDir);
 
       // cleanup db
       await Site.delAll();
@@ -50,6 +43,12 @@ connections.forEach((conn) => {
 
     after(() => {
       GetSetFetch.close();
+
+      /*
+      tmp has .gitkeep file in order to create the tmp directory on git checkout
+      recreate after tmp cleanp
+      */
+      fs.closeSync(fs.openSync(path.join(targetDir, '.gitkeep'), 'w'));
     });
 
     it('crawl all png resources', async () => {
@@ -68,10 +67,18 @@ connections.forEach((conn) => {
       // crawl the entire site
       await site.crawl();
 
-      // verify one file exists in target, is png
+      const expectedImages = ['getsetfetch-1.png'];
+
+      // verify correct number of files have been generated
       const genFiles = fs.readdirSync(targetDir);
-      assert.strictEqual(1, genFiles.length);
-      assert.strictEqual('.png', path.extname(genFiles[0]));
+      assert.strictEqual(expectedImages.length, genFiles.length);
+
+      // verify the generated files have the correct content
+      expectedImages.forEach((expectedImage) => {
+        const expectedBuffer = fs.readFileSync(path.join('test', 'integration', 'crawl-site-default-and-persistence-plugin', expectedImage));
+        const actualBuffer = fs.readFileSync(path.join('test', 'tmp', expectedImage));
+        assert.strictEqual(true, expectedBuffer.equals(actualBuffer), 'incorrect generated file content');
+      });
     });
 
     it('crawl all image resourcess', async () => {
@@ -90,13 +97,17 @@ connections.forEach((conn) => {
       // crawl the entire site
       await site.crawl();
 
-      // verify files are correctly generated
-      const genFiles = fs.readdirSync(targetDir);
-      assert.strictEqual(3, genFiles.length);
-
       const expectedImages = ['getsetfetch-1.png', 'getsetfetch-2.gif', 'getsetfetch-3.jpg'];
+
+      // verify correct number of files have been generated
+      const genFiles = fs.readdirSync(targetDir);
+      assert.strictEqual(expectedImages.length, genFiles.length);
+
+      // verify the generated files have the correct content
       expectedImages.forEach((expectedImage) => {
-        assert.include(genFiles, expectedImage);
+        const expectedBuffer = fs.readFileSync(path.join('test', 'integration', 'crawl-site-default-and-persistence-plugin', expectedImage));
+        const actualBuffer = fs.readFileSync(path.join('test', 'tmp', expectedImage));
+        assert.strictEqual(true, expectedBuffer.equals(actualBuffer), 'incorrect generated file content');
       });
     });
   });

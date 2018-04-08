@@ -41,6 +41,10 @@ class TestUtils {
       return 'text/html; charset=utf-8';
     }
 
+    if (/^.txt$/i.test(fileExt)) {
+      return 'text/plain; charset=utf-8';
+    }
+
     return '';
   }
 
