@@ -20,12 +20,12 @@ class TestUtils {
   }
 
   static fs2http(baseFilePath, baseWebPath) {
+    const nockScopes = [];
     const filePaths = TestUtils.getFilePaths(baseFilePath);
     filePaths.forEach((filePath) => {
       const filePathSufix = filePath.replace(baseFilePath, '').replace('\\', '/');
-      // console.log(`${baseWebPath + filePathSufix} ${TestUtils.getContentType(path.extname(filePath))}`);
-      nock(baseWebPath)
-        // .persist()
+      const nockScope = nock(baseWebPath)
+        .persist()
         .get(filePathSufix).reply(
           200,
           fs.readFileSync(filePath),
@@ -33,7 +33,18 @@ class TestUtils {
             'Content-Type': TestUtils.getContentType(path.extname(filePath)),
           },
         );
+
+      nockScopes.push(nockScope);
     });
+
+    return nockScopes;
+  }
+
+  static stopPersisting(nockScopes) {
+    nockScopes.forEach((nockScope) => {
+      nockScope.persist(false);
+    });
+    nock.cleanAll();
   }
 
   static getContentType(fileExt) {
@@ -55,9 +66,11 @@ class TestUtils {
     }
   }
 
-  // remove spaces and header, chrome adds an empty header even if none is present in the original document
-  static sanitize(html) {
-    return html.replace(/<head>.*<\/head>/g, '').replace(/\r?\n|\r|\s+/g, '');
+  // remove spaces and additional html tags added by chrome
+  // additional tags for content-type text/html: html, head, body
+  // additional tags for content-type text/plain: html, head, body, pre
+  static stripChromeExtraTags(html) {
+    return html.replace(/<\/*(html|head|body)>/g, '').replace(/\r?\n|\r|\s+/g, '');
   }
 }
 

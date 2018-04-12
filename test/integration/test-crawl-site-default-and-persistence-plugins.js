@@ -3,11 +3,12 @@ const fs = require('fs');
 const path = require('path');
 
 const connections = gsfRequire('test/config/connections.json');
-const pluginConfigurations = gsfRequire('test/config/plugin-configurations');
+const pluginConfigs = gsfRequire('test/config/plugin-configurations');
 const TestUtils = gsfRequire('test/utils/TestUtils');
 const GetSetFetch = gsfRequire('lib/index.js');
 
 connections.forEach((conn) => {
+  const pluginConfigurations = pluginConfigs.getPlugins();
   pluginConfigurations.forEach((pluginConf) => {
     /*
     pages:
@@ -19,6 +20,7 @@ connections.forEach((conn) => {
       `using plugin configuration: ${pluginConf.info}`, () => {
       let Site = null;
       let site = null;
+      let nockScopes = null;
 
       const targetDir = './test/tmp';
 
@@ -34,27 +36,27 @@ connections.forEach((conn) => {
         await Site.delAll();
 
         // save site
-        site = new Site('siteA', 'http://www.site1.com/index.html', { 'User-Agent': 'custom-user-agent' });
+        site = new Site('siteA', 'http://www.site1.com/index.html');
         await site.save();
 
         // configure nock to serve fs files
-        TestUtils.fs2http(path.join('test', 'integration', 'crawl-site-default-and-persistence-plugin'), 'http://www.site1.com');
+        nockScopes = TestUtils.fs2http(path.join('test', 'integration', 'crawl-site-default-and-persistence-plugin'), 'http://www.site1.com');
 
         // fetch and save robots.txt
         await site.fetchRobots();
         assert.strictEqual('#', site.robotsTxt);
 
         // set plugin configuration
-        // site.plugins = pluginConf.plugins;
+        site.setPlugins(pluginConf.plugins);
+      });
+
+      afterEach(() => {
+        TestUtils.stopPersisting(nockScopes);
       });
 
       after(async () => {
+        await site.cleanupPlugins();
         GetSetFetch.close();
-
-        // temp fix until destroy is automatically invoked on each site plugin after crawl completes
-        if (site.plugins[1].destroy) {
-          await site.plugins[1].destroy();
-        }
 
         /*
         tmp has .gitkeep file in order to create the tmp directory on git checkout
