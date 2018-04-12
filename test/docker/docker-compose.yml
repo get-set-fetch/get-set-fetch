@@ -8,6 +8,31 @@ services:
         networks:
             testntwk:
                 ipv4_address: 192.168.50.1
+                
+    mysql:
+        image: mysql/mysql-server:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: get-set-fetch-root
+            MYSQL_USER: get-set-fetch-user
+            MYSQL_PASSWORD: get-set-fetch-pswd
+            MYSQL_DATABASE: get-set-fetch-db
+        ports:
+            - 33060:3306 # host: container
+        networks:
+            testntwk:
+                ipv4_address: 192.168.50.2
+
+    postgres:
+        image: postgres:10.3-alpine
+        environment:
+            POSTGRES_USER: get-set-fetch-user
+            POSTGRES_PASSWORD: get-set-fetch-pswd
+            POSTGRES_DB: get-set-fetch-db
+        ports:
+            - 54320:5432 # host: container
+        networks:
+            testntwk:
+                ipv4_address: 192.168.50.3
 
 networks:
     testntwk:

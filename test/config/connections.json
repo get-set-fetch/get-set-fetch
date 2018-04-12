@@ -9,6 +9,32 @@
     }
   },
   {
+    "info": "knex with mysql 5.7",
+    "client": "mysql",
+    "useNullAsDefault": true,
+    "debug": false,
+    "connection": {
+      "host" : "localhost",
+      "port": 33060,
+      "user" : "get-set-fetch-user",
+      "password" : "get-set-fetch-pswd",
+      "database" : "get-set-fetch-db"
+    }
+  },
+  {
+    "info": "knex with postgres 10.3",
+    "client": "pg",
+    "useNullAsDefault": true,
+    "debug": false,
+    "connection": {
+      "host" : "localhost",
+      "port": 54320,
+      "user" : "get-set-fetch-user",
+      "password" : "get-set-fetch-pswd",
+      "database" : "get-set-fetch-db"
+    }
+  },
+  {
     "info": "mongoDB",
     "url": "mongodb://localhost:27027",
     "dbName": "get-set-fetch-test"
