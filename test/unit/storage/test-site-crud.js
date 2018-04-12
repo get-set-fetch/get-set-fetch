@@ -7,7 +7,15 @@ connections.forEach((conn) => {
   describe(`Test Storage Site - CRUD, using connection ${conn.info}`, () => {
     let Site = null;
     const expectedSite = {
-      id: null, name: 'siteA', url: 'http://siteA',
+      id: null,
+      name: 'siteA',
+      url: 'http://siteA',
+      opts: {
+        resourceFilter: {
+          maxEntries: 5000,
+          probability: 0.01,
+        },
+      },
     };
 
     before(async () => {
@@ -35,6 +43,7 @@ connections.forEach((conn) => {
       assert.instanceOf(siteById, Site);
       assert.strictEqual(expectedSite.name, siteById.name);
       assert.strictEqual(expectedSite.url, siteById.url);
+      assert.deepEqual(expectedSite.opts.resourceFilter, Site.defaultSiteOpts.resourceFilter);
 
       // get site by name
       const siteByName = await Site.get(expectedSite.name);
