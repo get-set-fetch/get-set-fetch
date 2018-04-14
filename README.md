@@ -30,20 +30,20 @@
     * [site.update()](#siteupdate)
     * [site.del()](#sitedel)
     * [Site.delAll()](#sitedelall)
-  * [Plugin API](#)
-    * [getPlugins()](#getPlugins)
-    * [setPlugins([plugins])](#getPlugins)
-    * [addPlugins([plugins])](#getPlugins)
-    * [removePlugins([plugins])](#getPlugins)
-    * [cleanupPlugins()](#)
-  * [Crawl API](#)
-    * [getResourceToCrawl()](#)
-    * [saveResources(urls, depth)](#)
-    * [getResourceCount()](#)
-    * [fetchRobots(reqHeaders)](#)
-    * [crawlResource()](#)
-    * [crawl()](#)
-    * [stop()](#)
+  * [Plugin API](#plugin-api)
+    * [site.getPlugins()](#sitegetplugins)
+    * [site.setPlugins(plugins)](#sitesetpluginsplugins)
+    * [site.addPlugins(plugins)](#siteaddpluginsplugins)
+    * [site.removePlugins(plugins)](#siteremovepluginsplugins)
+    * [site.cleanupPlugins()](#sitecleanupplugins)
+  * [Crawl API](#crawl-api)
+    * [site.getResourceToCrawl()](#sitegetresourcetocrawl)
+    * [site.saveResources(urls, depth)](#sitesaveresourcesurls-depth)
+    * [site.getResourceCount()](#sitegetresourcecount)
+    * [site.fetchRobots(reqHeaders)](#sitefetchrobotsreqheaders)
+    * [site.crawlResource()](#sitecrawlresource)
+    * [site.crawl(opts)](#sitecrawlopts)
+    * [site.stop()](#sitestop)
 - [Resource](#)
     * [new Resource(siteId, url, depth)](#)
     * [CRUD API](#)
@@ -59,6 +59,7 @@
   * [register](#)
   * [instantiate](#)
 - [Plugins](#)
+  * [Phases](#)
   * [Default](#)
     * [SelectResourcePlugin](#)
     * [NodeFetchPlugin](#)
@@ -205,11 +206,11 @@ const { Site } = await GetSetFetch.init({
 
 ## Site
 
-### new Site (name, url, opts, createDefaultPlugins)
+### new Site(name, url, opts, createDefaultPlugins)
 - `name` &lt;string> site name
 - `url` &lt;string> site url
 - `opts` &lt;Object> site options
-  - `resourceFilter` &lt;Object]> bloom filter settings for filtering duplicate urls
+  - `resourceFilter` &lt;Object> bloom filter settings for filtering duplicate urls
     - `maxEntries` &lt;number> maximum number of expected unique urls. Defaults to `5000`.
     - `probability` &lt;number> probability an url is eronately marked as duplicate. Defaults to `0.01`.
 - `createDefaultPlugins` &lt;boolean> indicate if the default plugin set should be added to the site. Defaults to `true`.
@@ -245,6 +246,37 @@ Remove the matching plugins from the existing ones.
 #### site.cleanupPlugins()
  - Some plugins (like [ChromeFetchPlugin]) open external processes. Each plugin is responsible for its own cleanup via plugin.cleanup(). 
 
+### Crawl API
+
+#### site.getResourceToCrawl()
+- returns <Promise<[Resource]>>  
+#### site.saveResources(urls, depth)
+- `urls` <Array&lt;String>> urls of the resources to be added
+- `depth` &lt;Number> depth of the resources to be added
+- returns &lt;Promise>  
+The urls are filtered against the site bloom filter in order to remove duplicates.
+#### site.getResourceCount()
+- returns <Promise<&lt;number>>  total number of site resources
+#### site.fetchRobots(reqHeaders)
+- `reqHeaders` &lt;Object>  
+Retrieves the site robots.txt content via <NodeFetchPlugin> and updates the site robotsTxt property.
+- returns &lt;Promise>
+#### site.crawlResource()
+- Loops through the ordered (based on phase) plugins and apply each one to the current site-resource pair. The first plugin in the SELECT phase is responsible for retrieving the resource to be crawled.
+#### site.crawl(opts)
+- `opts` &lt;Object> crawl options
+  - `maxConnections` &lt;number> maximum number of resources crawled in parallel. Defaults to `1`.
+  - `maxResources` &lt;number> If set, crawling will stop once the indicated number of resources has been crawled.
+  - `maxDepth` &lt;number> If set, crawling will stop once there are no more resources with a lower than indicated depth.
+  - `delay` &lt;number> delay in miliseconds between consecutive crawls. Defaults to `100`.
+Each time a resource has finished crawling attempt to restore maximum number of parallel conections in case new resources have been found and saved. Crawling stops and the returned promise is resolved once there are no more resources to crawl meeting the above criteria.
+- returns &lt;Promise>
+#### site.stop()
+- No further resource crawls are initiated. The one in progress are completed.
+- returns &lt;Promise>
+
+
+
 
 
 Read the [full documentation](https://getsetfetch.org) for more details.
@@ -252,8 +284,11 @@ Read the [full documentation](https://getsetfetch.org) for more details.
 
 
 [Site]: #site  "Site"
+[Resource]: #resource  "Resource"
 [BasePlugin]: #baseplugin  "BasePlugin"
+
 [ChromeFetchPlugin]: #chromefetchplugin "ChromeFetchPlugin"
+[NodeFetchPlugin]: #nodefetchplugin "NodeFetchPlugin"
 
 
 
