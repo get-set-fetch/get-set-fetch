@@ -1,4 +1,5 @@
-# get-set, Fetch!
+<img src="https://get-set-fetch.github.io/get-set-fetch/logo.png">
+
 
 [![node](https://img.shields.io/node/v/get-set-fetch.svg)](https://github.com/get-set-fetch/get-set-fetch)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fget-set-fetch%2Fget-set-fetch.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fget-set-fetch%2Fget-set-fetch?ref=badge_shield)
@@ -8,6 +9,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/get-set-fetch/get-set-fetch/badge.svg?branch=master)](https://coveralls.io/github/get-set-fetch/get-set-fetch?branch=master)
 
 > nodejs web crawler and scrapper supporting various storage options under an extendable plugin system
+<img style="float: right;" src="https://get-set-fetch.github.io/get-set-fetch/logo.png">
 
 ## Table of Contents
 - [Getting Started](#getting-started)
@@ -279,7 +281,7 @@ Each time a resource has finished crawling attempt to restore maximum number of 
 - `urlOrId` &lt;string> resource url or id
 - returns <Promise<[Resource]>>  
 #### resource.save()
-- returns <Promise<&lt;number>> the newly created resource id  
+- returns <Promise&lt;number>> the newly created resource id  
 #### resource.update()
 - returns &lt;Promise>
 #### resource.del()
@@ -331,7 +333,8 @@ returns <Promise<[Resource]>>
 #### PersistResourcePlugin
 -  Writes a resources to disk.
 #### ChromeFetchPlugin
-- Alternative to <[NodeFetchPlugin]>, instead of just downloading a site resource it also executes the javascript code (if present) returning the dynamically generated html content.
+- Alternative to <[NodeFetchPlugin]>, instead of just downloading a site resource it also executes the javascript code (if present) returning the dynamically generated html content. Uses Puppeteer to control headless Chrome which needs to be installed separately:  
+```npm install puppeteer --save```
 
 
 ## Additional Documentation
