@@ -16,11 +16,11 @@
   * [First crawl](#first-crawl)
 - [Storage](#storage)
   * [SQL Connections](#sql-connections)
-    * [SQLite](#storage)
-    * [MySQL](#storage)
-    * [Postgresql](#storage)
+    * [SQLite](#sqlite)
+    * [MySQL](#mysql)
+    * [PostgreSQL](#postgresql)
   * [NoSQL Connections](#nosql-connections)
-    * [MongoDB](#storage)
+    * [MongoDB](#mongodb)
 - [Site](#site)
   * [Site CRUD API](#site-crud-api)
     * [new Site(name, url, opts, createDefaultPlugins)](#site-crud-api)
@@ -69,11 +69,7 @@
   * [Optional Plugins](#optional-plugins)
     * [PersistResourcePlugin](#persistresourceplugin)
     * [ChromeFetchPlugin](#chromefetchplugin)
-- [Scenarios](#)
-  * [Image Scrapper](#)
-  * [Static Content Scrapper](#)
-  * [Dynamic Content Scrapper](#)
-  * [Periodic Crawling](#)
+- [Additional Documentation](#additional-documentation)
 
 
 
@@ -168,7 +164,7 @@ const { Site } = await GetSetFetch.init({
 });
 ```
 
-#### Postgresql
+#### PostgreSQL
 Requires knex and postgresql driver.  
 ```npm install knex pg --save```
 
@@ -211,7 +207,7 @@ const { Site } = await GetSetFetch.init({
 - `opts` &lt;Object> site options
   - `resourceFilter` &lt;Object> bloom filter settings for filtering duplicate urls
     - `maxEntries` &lt;number> maximum number of expected unique urls. Defaults to `5000`.
-    - `probability` &lt;number> probability an url is eronately marked as duplicate. Defaults to `0.01`.
+    - `probability` &lt;number> probability an url is erroneously marked as duplicate. Defaults to `0.01`.
 - `createDefaultPlugins` &lt;boolean> indicate if the default plugin set should be added to the site. Defaults to `true`.
 #### Site.get(nameOrId)
 - `nameOrId` &lt;string> site name or id
@@ -265,7 +261,7 @@ Retrieves the site robots.txt content via <NodeFetchPlugin> and updates the site
   - `maxResources` &lt;number> If set, crawling will stop once the indicated number of resources has been crawled.
   - `maxDepth` &lt;number> If set, crawling will stop once there are no more resources with a lower than indicated depth.
   - `delay` &lt;number> delay in miliseconds between consecutive crawls. Defaults to `100`.
-Each time a resource has finished crawling attempt to restore maximum number of parallel conections in case new resources have been found and saved. Crawling stops and the returned promise is resolved once there are no more resources to crawl meeting the above criteria.
+Each time a resource has finished crawling attempt to restore maximum number of parallel connections in case new resources have been found and saved. Crawling stops and the returned promise is resolved once there are no more resources to crawl meeting the above criteria.
 - returns &lt;Promise>
 #### site.stop()
 - No further resource crawls are initiated. The one in progress are completed.
@@ -338,6 +334,7 @@ returns <Promise<[Resource]>>
 - Alternative to <[NodeFetchPlugin]>, instead of just downloading a site resource it also executes the javascript code (if present) returning the dynamically generated html content.
 
 
+## Additional Documentation
 Read the [full documentation](https://getsetfetch.org) for more details.
 
 
