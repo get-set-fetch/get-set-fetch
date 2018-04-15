@@ -8,8 +8,7 @@
 [![Build Status](https://travis-ci.org/get-set-fetch/get-set-fetch.svg?branch=master)](https://travis-ci.org/get-set-fetch/get-set-fetch)
 [![Coverage Status](https://coveralls.io/repos/github/get-set-fetch/get-set-fetch/badge.svg?branch=master)](https://coveralls.io/github/get-set-fetch/get-set-fetch?branch=master)
 
-> nodejs web crawler and scrapper supporting various storage options under an extendable plugin system
-<img style="float: right;" src="https://get-set-fetch.github.io/get-set-fetch/logo.png">
+> Node.js web crawler and scrapper supporting various storage options under an extendable plugin system.
 
 ## Table of Contents
 - [Getting Started](#getting-started)
@@ -316,7 +315,7 @@ returns <Promise<[Resource]>>
 #### SelectResourcePlugin
 - Selects a resource to crawl from the current site.
 #### NodeFetchPlugin
-- Downloads a site resource.
+- Downloads a site resource using node HTTP and HTTPS libraries.
 #### JsDomPlugin
 - Generates a jsdom document for the current resource.
 #### ExtractUrlPlugin
