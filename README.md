@@ -1,12 +1,11 @@
+# get-set, Fetch!
+
 [![node](https://img.shields.io/node/v/get-set-fetch.svg)](https://github.com/get-set-fetch/get-set-fetch)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fget-set-fetch%2Fget-set-fetch.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fget-set-fetch%2Fget-set-fetch?ref=badge_shield)
 [![dependencies Status](https://david-dm.org/get-set-fetch/get-set-fetch/status.svg)](https://david-dm.org/get-set-fetch/get-set-fetch)
 [![Known Vulnerabilities](https://snyk.io/test/github/get-set-fetch/get-set-fetch/badge.svg?targetFile=package.json)](https://snyk.io/test/github/get-set-fetch/get-set-fetch?targetFile=package.json)
 [![Build Status](https://travis-ci.org/get-set-fetch/get-set-fetch.svg?branch=master)](https://travis-ci.org/get-set-fetch/get-set-fetch)
 [![Coverage Status](https://coveralls.io/repos/github/get-set-fetch/get-set-fetch/badge.svg?branch=master)](https://coveralls.io/github/get-set-fetch/get-set-fetch?branch=master)
-
-# get-set, Fetch!
-
 
 > nodejs web crawler and scrapper supporting various storage options under an extendable plugin system
 
@@ -23,55 +22,53 @@
   * [NoSQL Connections](#nosql-connections)
     * [MongoDB](#storage)
 - [Site](#site)
-  * [new Site(name, url, opts, createDefaultPlugins)](#site)
-  * [CRUD API](#crud-api)
+  * [Site CRUD API](#site-crud-api)
+    * [new Site(name, url, opts, createDefaultPlugins)](#site-crud-api)
     * [Site.get(nameOrId)](#sitegetnameorid)
     * [site.save()](#sitesave)
     * [site.update()](#siteupdate)
     * [site.del()](#sitedel)
     * [Site.delAll()](#sitedelall)
-  * [Plugin API](#plugin-api)
-    * [site.getPlugins()](#sitegetplugins)
-    * [site.setPlugins(plugins)](#sitesetpluginsplugins)
-    * [site.addPlugins(plugins)](#siteaddpluginsplugins)
-    * [site.removePlugins(plugins)](#siteremovepluginsplugins)
-    * [site.cleanupPlugins()](#sitecleanupplugins)
-  * [Crawl API](#crawl-api)
-    * [site.getResourceToCrawl()](#sitegetresourcetocrawl)
-    * [site.saveResources(urls, depth)](#sitesaveresourcesurls-depth)
-    * [site.getResourceCount()](#sitegetresourcecount)
-    * [site.fetchRobots(reqHeaders)](#sitefetchrobotsreqheaders)
-    * [site.crawlResource()](#sitecrawlresource)
-    * [site.crawl(opts)](#sitecrawlopts)
-    * [site.stop()](#sitestop)
-- [Resource](#)
-    * [new Resource(siteId, url, depth)](#)
-    * [CRUD API](#)
-      * [get(urlOrId)](#)
-      * [save()](#)
-      * [update()](#)
-      * [del()](#)
-      * [delAll()](#)
-    * [Crawl API](#)
-      * [getResourceToCrawl(siteId)](#)
-- [PluginManager](#)
-  * [DEFAULT_PLUGINS](#)
-  * [register](#)
-  * [instantiate](#)
-- [Plugins](#)
-  * [Phases](#)
-  * [Default](#)
-    * [SelectResourcePlugin](#)
-    * [NodeFetchPlugin](#)
-    * [JsDomPlugin](#)
-    * [ExtractUrlPlugin](#)
-    * [RobotsFilterPlugin](#)
-    * [UpdateResourcePlugin](#)
-    * [InsertResourcePlugin](#)
-  * [Optional](#)
-    * [PersistResourcePlugin](#)
-    * [ChromeFetchPlugin](#)
-  * [Write a custom plugins](#)
+  * [Site Plugin API](#site-plugin-api)
+      * [site.getPlugins()](#sitegetplugins)
+      * [site.setPlugins(plugins)](#sitesetpluginsplugins)
+      * [site.addPlugins(plugins)](#siteaddpluginsplugins)
+      * [site.removePlugins(plugins)](#siteremovepluginsplugins)
+      * [site.cleanupPlugins()](#sitecleanupplugins)
+  * [Site Crawl API](#site-crawl-api)
+      * [site.getResourceToCrawl()](#sitegetresourcetocrawl)
+      * [site.saveResources(urls, depth)](#sitesaveresourcesurls-depth)
+      * [site.getResourceCount()](#sitegetresourcecount)
+      * [site.fetchRobots(reqHeaders)](#sitefetchrobotsreqheaders)
+      * [site.crawlResource()](#sitecrawlresource)
+      * [site.crawl(opts)](#sitecrawlopts)
+      * [site.stop()](#sitestop)
+- [Resource](#resource)
+  * [Resource CRUD API](#resource-crud-api)
+      * [new Resource(siteId, url, depth)](#resource-crud-api)
+      * [Resource.get(urlOrId)](#resourcegeturlorid)
+      * [resource.save()](#resourcesave)
+      * [resource.update()](#resourceupdate)
+      * [resource.del()](#resourcedel)
+      * [Resource.delAll()](#resourcedelall)
+  * [Resource Crawl API](#)
+      * [Resource.getResourceToCrawl(siteId)](#resourcegetresourcetocrawlsiteid)
+- [PluginManager](#pluginmanager)
+  * [PluginManager.DEFAULT_PLUGINS](#pluginmanagerdefaultplugins)
+  * [pluginManager.register(plugins)](#pluginmanagerregisterplugins)
+  * [pluginManager.instantiate(jsonPlugins)](#pluginmanagerinstantiatejsonplugins)
+- [Plugins](#plugins)
+  * [Default Plugins](#default-plugins)
+    * [SelectResourcePlugin](#selectresourceplugin)
+    * [NodeFetchPlugin](#nodefetchplugin)
+    * [JsDomPlugin](#jsdomplugin)
+    * [ExtractUrlPlugin](#extracturlplugin)
+    * [RobotsFilterPlugin](#robotsfilterplugin)
+    * [UpdateResourcePlugin](#updateresourceplugin)
+    * [InsertResourcePlugin](#insertresourceplugin)
+  * [Optional Plugins](#optional-plugins)
+    * [PersistResourcePlugin](#persistresourceplugin)
+    * [ChromeFetchPlugin](#chromefetchplugin)
 - [Scenarios](#)
   * [Image Scrapper](#)
   * [Static Content Scrapper](#)
@@ -204,9 +201,11 @@ const { Site } = await GetSetFetch.init({
 });
 ```
 
-## Site
+## Site 
 
-### new Site(name, url, opts, createDefaultPlugins)
+### Site CRUD API
+
+#### new Site(name, url, opts, createDefaultPlugins)
 - `name` &lt;string> site name
 - `url` &lt;string> site url
 - `opts` &lt;Object> site options
@@ -214,9 +213,6 @@ const { Site } = await GetSetFetch.init({
     - `maxEntries` &lt;number> maximum number of expected unique urls. Defaults to `5000`.
     - `probability` &lt;number> probability an url is eronately marked as duplicate. Defaults to `0.01`.
 - `createDefaultPlugins` &lt;boolean> indicate if the default plugin set should be added to the site. Defaults to `true`.
-
-### CRUD API
-
 #### Site.get(nameOrId)
 - `nameOrId` &lt;string> site name or id
 - returns <Promise<[Site]>>  
@@ -230,7 +226,7 @@ When a new site is created, its url is also saved as the first site resource at 
 #### Site.delAll()
 - returns &lt;Promise>
 
-### Plugin API
+### Site Plugin API
 
 #### site.getPlugins()
 - returns <Array<[BasePlugin]>> the plugins used for crawling.
@@ -246,7 +242,7 @@ Remove the matching plugins from the existing ones.
 #### site.cleanupPlugins()
  - Some plugins (like [ChromeFetchPlugin]) open external processes. Each plugin is responsible for its own cleanup via plugin.cleanup(). 
 
-### Crawl API
+### Site Crawl API
 
 #### site.getResourceToCrawl()
 - returns <Promise<[Resource]>>  
@@ -275,8 +271,71 @@ Each time a resource has finished crawling attempt to restore maximum number of 
 - No further resource crawls are initiated. The one in progress are completed.
 - returns &lt;Promise>
 
+## Resource
+
+### Resource CRUD API
+
+#### new Resource(siteId, url, depth)
+- `siteId` &lt;string> id of the site the resource belongs to
+- `url` &lt;string> resource url
+- `depth` &lt;number> resource depth. First site resource has depth 0.
+#### Resource.get(urlOrId)
+- `urlOrId` &lt;string> resource url or id
+- returns <Promise<[Resource]>>  
+#### resource.save()
+- returns <Promise<&lt;number>> the newly created resource id  
+#### resource.update()
+- returns &lt;Promise>
+#### resource.del()
+- returns &lt;Promise>
+#### Resource.delAll()
+- returns &lt;Promise>
+
+### Resource Crawl API
+
+#### Resource.getResourceToCrawl(siteId)
+- `siteId` &lt;string> resource will belong to the specified site id
+returns <Promise<[Resource]>>
 
 
+## PluginManager
+
+#### PluginManager.DEFAULT_PLUGINS
+- returns <Array<[BasePlugin]>> default plugins
+
+#### pluginManager.register(plugins)
+- `plugins` <Array<[BasePlugin]>|[BasePlugin]> registered plugins can later be instantiated from JSON strings retrieved from storage.
+
+#### pluginManager.instantiate(jsonPlugins)
+- `plugins` <Array<[string]>|[string]> instantiate plugin(s) from their corresponding JSON strings
+- returns <Array<[BasePlugin]>|[BasePlugin]> plugin instance(s)
+
+
+## Plugins
+
+### Default Plugins
+
+#### SelectResourcePlugin
+- Selects a resource to crawl from the current site.
+#### NodeFetchPlugin
+- Downloads a site resource.
+#### JsDomPlugin
+- Generates a jsdom document for the current resource.
+#### ExtractUrlPlugin
+- Responsible for extracting new resources from a resource document.
+#### RobotsFilterPlugin
+- Filters newly found resources based on robots.txt rules.
+#### UpdateResourcePlugin
+- Updates a resource after crawling it.
+#### InsertResourcePlugin
+- Saves newly found resource within the current site.
+
+### Optional Plugins
+
+#### PersistResourcePlugin
+-  Writes a resources to disk.
+#### ChromeFetchPlugin
+- Alternative to <[NodeFetchPlugin]>, instead of just downloading a site resource it also executes the javascript code (if present) returning the dynamically generated html content.
 
 
 Read the [full documentation](https://getsetfetch.org) for more details.
