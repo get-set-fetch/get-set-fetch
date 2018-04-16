@@ -4,8 +4,8 @@ const Storage = gsfRequire('lib/storage/Storage');
 const mongodb = require('mongodb');
 
 describe('Test Storage Init', () => {
-  afterEach(() => {
-    Storage.close();
+  afterEach(async () => {
+    await Storage.close();
   });
 
   it('storage init - default sqlite:memory', async () => {

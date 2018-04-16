@@ -27,8 +27,8 @@ connections.forEach((conn) => {
       await site.save();
     });
 
-    after(() => {
-      Storage.close();
+    after(async () => {
+      await Storage.close();
     });
 
     it('get default plugins', async () => {

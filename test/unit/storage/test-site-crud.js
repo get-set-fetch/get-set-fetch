@@ -33,8 +33,8 @@ connections.forEach((conn) => {
       expectedSite.id = site.id;
     });
 
-    after(() => {
-      Storage.close();
+    after(async () => {
+      await Storage.close();
     });
 
     it('get', async () => {

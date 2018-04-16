@@ -32,8 +32,8 @@ connections.forEach((conn) => {
       expectedResource.id = resource.id;
     });
 
-    after(() => {
-      Storage.close();
+    after(async () => {
+      await Storage.close();
     });
 
     it('get', async () => {

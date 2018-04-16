@@ -56,7 +56,7 @@ connections.forEach((conn) => {
 
       after(async () => {
         await site.cleanupPlugins();
-        GetSetFetch.close();
+        await GetSetFetch.close();
 
         /*
         tmp has .gitkeep file in order to create the tmp directory on git checkout

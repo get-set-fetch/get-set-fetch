@@ -55,7 +55,7 @@ connections.forEach((conn) => {
 
       after(async () => {
         await site.cleanupPlugins();
-        GetSetFetch.close();
+        await GetSetFetch.close();
       });
 
       it('crawl resource - index.html, 1st page, depth 0', async () => {
