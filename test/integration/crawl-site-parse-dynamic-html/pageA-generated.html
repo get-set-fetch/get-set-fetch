@@ -1,0 +1,22 @@
+<html>
+	<script src="dynamic-links.js"></script>
+	<body>		
+		<p>Page A dynamic content</p>
+		<script>
+			genDynamicLinks([
+				{
+					href: "index.html",
+					text: "main"
+				},
+				{
+					href: "pageB.html",
+					text: "pageB"
+				}
+			])
+		</script>
+		<div>
+			<a href="index.html">main</a>
+			<a href="pageB.html">pageB</a>
+		</div>
+	</body>
+</html>
