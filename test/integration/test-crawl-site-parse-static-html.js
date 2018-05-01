@@ -19,15 +19,16 @@ connections.forEach((conn) => {
 
       robots.txt restricts crawling of ./extra subdir
     */
-    describe('Test Scenario: parse html resources\n' +
+    describe('Test Scenario: parse static html resources - one depth at a time\n' +
       `using db connection: ${conn.info}\n` +
       `using plugin configuration: ${pluginConf.info}`, () => {
       let Site = null;
+      let Resource = null;
       let site = null;
       let nockScopes = null;
 
       before(async () => {
-        ({ Site } = await GetSetFetch.init(conn));
+        ({ Site, Resource } = await GetSetFetch.init(conn));
       });
 
       beforeEach(async () => {
@@ -39,18 +40,22 @@ connections.forEach((conn) => {
         await site.save();
 
         // configure nock to serve fs files
-        nockScopes = TestUtils.fs2http(path.join('test', 'integration', 'crawl-site-default-plugin'), 'http://www.site1.com');
+        nockScopes = TestUtils.fs2http(path.join('test', 'integration', 'crawl-site-parse-static-html'), 'http://www.site1.com');
 
         // fetch and save robots.txt
         await site.fetchRobots();
-        assert.strictEqual(String(fs.readFileSync('test/integration/crawl-site-default-plugin/robots.txt')), site.robotsTxt);
+        assert.strictEqual(String(fs.readFileSync('test/integration/crawl-site-parse-static-html/robots.txt')), site.robotsTxt);
 
         // set plugin configuration
         site.setPlugins(pluginConf.plugins);
       });
 
-      afterEach(() => {
+      afterEach(async () => {
         TestUtils.stopPersisting(nockScopes);
+
+        // cleanup
+        await Resource.delAll();
+        await Site.delAll();
       });
 
       after(async () => {
@@ -64,8 +69,8 @@ connections.forEach((conn) => {
 
         // verify resource content
         assert.strictEqual(
-          TestUtils.stripChromeExtraTags(String(fs.readFileSync('test/integration/crawl-site-default-plugin/index.html'))),
-          TestUtils.stripChromeExtraTags(resource.content),
+          TestUtils.stripChromeExtraTags(String(fs.readFileSync('test/integration/crawl-site-parse-static-html/index.html'))),
+          TestUtils.stripChromeExtraTags(resource.content.toString()),
         );
 
         // verify jsdom instance
@@ -98,8 +103,8 @@ connections.forEach((conn) => {
 
         // verify resource content
         assert.strictEqual(
-          TestUtils.stripChromeExtraTags(String(fs.readFileSync('test/integration/crawl-site-default-plugin/pageA.html'))),
-          TestUtils.stripChromeExtraTags(resource.content),
+          TestUtils.stripChromeExtraTags(String(fs.readFileSync('test/integration/crawl-site-parse-static-html/pageA.html'))),
+          TestUtils.stripChromeExtraTags(resource.content.toString()),
         );
 
         // verify jsdom instance
@@ -132,8 +137,8 @@ connections.forEach((conn) => {
 
         // verify resource content
         assert.strictEqual(
-          TestUtils.stripChromeExtraTags(String(fs.readFileSync('test/integration/crawl-site-default-plugin/pageB.html'))),
-          TestUtils.stripChromeExtraTags(resource.content),
+          TestUtils.stripChromeExtraTags(String(fs.readFileSync('test/integration/crawl-site-parse-static-html/pageB.html'))),
+          TestUtils.stripChromeExtraTags(resource.content.toString()),
         );
 
         // verify jsdom instance

@@ -19,13 +19,14 @@ connections.forEach((conn) => {
       `using db connection: ${conn.info}\n` +
       `using plugin configuration: ${pluginConf.info}`, () => {
       let Site = null;
+      let Resource = null;
       let site = null;
       let nockScopes = null;
 
       const targetDir = './test/tmp';
 
       before(async () => {
-        ({ Site } = await GetSetFetch.init(conn));
+        ({ Site, Resource } = await GetSetFetch.init(conn));
 
         // temporary fix for #28, mysql test fails indeterminately
         await new Promise((resolve) => {
@@ -45,7 +46,7 @@ connections.forEach((conn) => {
         await site.save();
 
         // configure nock to serve fs files
-        nockScopes = TestUtils.fs2http(path.join('test', 'integration', 'crawl-site-default-and-persistence-plugin'), 'http://www.site1.com');
+        nockScopes = TestUtils.fs2http(path.join('test', 'integration', 'crawl-site-extract-images'), 'http://www.site1.com');
 
         // fetch and save robots.txt
         await site.fetchRobots();
@@ -55,8 +56,12 @@ connections.forEach((conn) => {
         site.setPlugins(pluginConf.plugins);
       });
 
-      afterEach(() => {
+      afterEach(async () => {
         TestUtils.stopPersisting(nockScopes);
+
+        // cleanup
+        await Resource.delAll();
+        await Site.delAll();
       });
 
       after(async () => {
@@ -93,17 +98,17 @@ connections.forEach((conn) => {
         assert.strictEqual(expectedImages.length, genFiles.length);
 
         // verify the generated files have the correct content
-        expectedImages.forEach((expectedImage) => {
+        for (let i = 0; i < expectedImages.length; i += 1) {
           const expectedBuffer = fs.readFileSync(path.join(
-            'test', 'integration', 'crawl-site-default-and-persistence-plugin',
-            expectedImage,
+            'test', 'integration', 'crawl-site-extract-images',
+            expectedImages[i],
           ));
-          const actualBuffer = fs.readFileSync(path.join('test', 'tmp', expectedImage));
+          const actualBuffer = fs.readFileSync(path.join('test', 'tmp', expectedImages[i]));
           assert.strictEqual(true, expectedBuffer.equals(actualBuffer), 'incorrect generated file content');
-        });
+        }
       });
 
-      it('crawl all image resourcess', async () => {
+      it('crawl all image resources', async () => {
         /*
         by default ExtractUrlPlugin only extracts html resources
         overide the default plugin instance with a new one containing suitable options
@@ -126,14 +131,15 @@ connections.forEach((conn) => {
         assert.strictEqual(expectedImages.length, genFiles.length);
 
         // verify the generated files have the correct content
-        expectedImages.forEach((expectedImage) => {
+        for (let i = 0; i < expectedImages.length; i += 1) {
           const expectedBuffer = fs.readFileSync(path.join(
-            'test', 'integration', 'crawl-site-default-and-persistence-plugin',
-            expectedImage,
+            'test', 'integration', 'crawl-site-extract-images',
+            expectedImages[i],
           ));
-          const actualBuffer = fs.readFileSync(path.join('test', 'tmp', expectedImage));
+          const actualBuffer = fs.readFileSync(path.join('test', 'tmp', expectedImages[i]));
+          assert.isNotNull(actualBuffer);
           assert.strictEqual(true, expectedBuffer.equals(actualBuffer), 'incorrect generated file content');
-        });
+        }
       });
     });
   });
