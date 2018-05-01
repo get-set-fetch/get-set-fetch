@@ -19,14 +19,15 @@ connections.forEach((conn) => {
       let nockScopes = null;
 
       before(async () => {
-        ({ Site, Resource } = await GetSetFetch.init(conn));
-
         // temporary fix for #28, mysql test fails indeterminately
         if (conn.client === 'mysql') {
+          console.log('wait before initializing mysql connection');
           await new Promise((resolve) => {
-            setTimeout(() => resolve(), 2000);
+            setTimeout(() => resolve(), 10 * 1000);
           });
         }
+
+        ({ Site, Resource } = await GetSetFetch.init(conn));
       });
 
       beforeEach(async () => {
