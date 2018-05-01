@@ -20,6 +20,13 @@ connections.forEach((conn) => {
 
       before(async () => {
         ({ Site, Resource } = await GetSetFetch.init(conn));
+
+        // temporary fix for #28, mysql test fails indeterminately
+        if (conn.client === 'mysql') {
+          await new Promise((resolve) => {
+            setTimeout(() => resolve(), 2000);
+          });
+        }
       });
 
       beforeEach(async () => {
