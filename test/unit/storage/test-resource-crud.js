@@ -1,7 +1,6 @@
 require('chai/register-assert');
 
 const connections = gsfRequire('test/config/connections.json');
-
 const Storage = gsfRequire('lib/storage/Storage');
 
 connections.forEach((conn) => {
@@ -9,7 +8,12 @@ connections.forEach((conn) => {
     let Site = null;
     let Resource = null;
     const expectedResource = {
-      id: null, siteId: null, url: 'http://siteA/resourceA', info: { propA: 'valA' },
+      id: null,
+      siteId: null,
+      url: 'http://siteA/resourceA',
+      info: { propA: 'valA' },
+      content: Buffer.from('contentA'),
+      contentType: 'text/plain',
     };
 
     before(async () => {
@@ -27,6 +31,8 @@ connections.forEach((conn) => {
       // save resource
       const resource = new Resource(expectedResource.siteId, expectedResource.url);
       resource.info = expectedResource.info;
+      resource.content = expectedResource.content;
+      resource.contentType = expectedResource.contentType;
       await resource.save();
       assert.isNotNull(resource.id);
       expectedResource.id = resource.id;
@@ -43,6 +49,8 @@ connections.forEach((conn) => {
       assert.strictEqual(String(expectedResource.siteId), String(resourceById.siteId));
       assert.strictEqual(expectedResource.url, resourceById.url);
       assert.strictEqual(expectedResource.info.propA, resourceById.info.propA);
+      assert.strictEqual(true, expectedResource.content.equals(resourceById.content));
+      assert.strictEqual(expectedResource.contentType, resourceById.contentType);
 
       // get resource by url
       const resourceByUrl = await Resource.get(expectedResource.url);
@@ -50,6 +58,8 @@ connections.forEach((conn) => {
       assert.strictEqual(String(expectedResource.id), String(resourceByUrl.id));
       assert.strictEqual(String(expectedResource.siteId), String(resourceByUrl.siteId));
       assert.strictEqual(expectedResource.info.propA, resourceByUrl.info.propA);
+      assert.strictEqual(true, expectedResource.content.equals(resourceById.content));
+      assert.strictEqual(expectedResource.contentType, resourceById.contentType);
     });
 
     it('update', async () => {
@@ -57,6 +67,7 @@ connections.forEach((conn) => {
       const updateResource = await Resource.get(expectedResource.id);
       updateResource.url = 'http://siteA/resourceA_updated';
       updateResource.info = { propA: 'valA_changed' };
+      updateResource.content = 'contentA_changed';
       await updateResource.update();
 
       // get and compare
@@ -64,6 +75,20 @@ connections.forEach((conn) => {
       assert.strictEqual(String(expectedResource.siteId), String(getResource.siteId));
       assert.strictEqual(updateResource.url, getResource.url);
       assert.strictEqual(updateResource.info.propA, getResource.info.propA);
+      assert.strictEqual(updateResource.contentType, getResource.contentType);
+    });
+
+    it('update binary content', async () => {
+      // update resource
+      const updateResource = await Resource.get(expectedResource.id);
+      updateResource.content = Buffer.alloc(2, 1);
+      updateResource.contentType = 'utf8';
+      await updateResource.update();
+
+      // get and compare
+      const getResource = await Resource.get(expectedResource.id);
+      assert.strictEqual(true, updateResource.content.equals(getResource.content));
+      assert.strictEqual(updateResource.contentType, getResource.contentType);
     });
 
     it('delete', async () => {

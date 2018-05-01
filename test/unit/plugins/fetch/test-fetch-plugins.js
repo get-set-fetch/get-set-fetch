@@ -21,19 +21,19 @@ fetchPlugins.forEach((fetchPlugin) => {
     it('http fetch default port', async () => {
       nock('http://www.site.com').get('/pageA').reply(200, 'httpA', { 'Content-Type': 'text/html; charset=utf-8' });
       const { content } = await fetchPlugin.fetch({ url: 'http://www.site.com/pageA' });
-      assert.strictEqual('httpA', TestUtils.stripChromeExtraTags(content));
+      assert.strictEqual('httpA', TestUtils.stripChromeExtraTags(content.toString()));
     });
 
     it('http fetch custom port', async () => {
       nock('http://www.site.com:8090').get('/pageA').reply(200, 'httpA-8090', { 'Content-Type': 'text/html; charset=utf-8' });
       const { content } = await fetchPlugin.fetch({ url: 'http://www.site.com:8090/pageA' });
-      assert.strictEqual('httpA-8090', TestUtils.stripChromeExtraTags(content));
+      assert.strictEqual('httpA-8090', TestUtils.stripChromeExtraTags(content.toString()));
     });
 
     it('https fetch default port', async () => {
       nock('https://www.site.com').get('/pageA').reply(200, 'httspA', { 'Content-Type': 'text/html; charset=utf-8' });
       const { content } = await fetchPlugin.fetch({ url: 'https://www.site.com/pageA' });
-      assert.strictEqual('httspA', TestUtils.stripChromeExtraTags(content));
+      assert.strictEqual('httspA', TestUtils.stripChromeExtraTags(content.toString()));
     });
 
     it('http fetch user agent', async () => {
@@ -47,7 +47,7 @@ fetchPlugins.forEach((fetchPlugin) => {
       });
 
       const { content } = await fetchPlugin.fetch({ url: 'http://www.site.com/pageA' });
-      assert.strictEqual('httpA', TestUtils.stripChromeExtraTags(content));
+      assert.strictEqual('httpA', TestUtils.stripChromeExtraTags(content.toString()));
     });
 
     it('returns request headers', async () => {

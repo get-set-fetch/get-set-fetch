@@ -20,7 +20,7 @@ describe('Test ChromeFetchPlugin', () => {
   it('page closes after singles fetch completes', async () => {
     nock('http://www.site.com').get('/pageA').reply(200, 'httpA', { 'Content-Type': 'text/html; charset=utf-8' });
     const { content } = await chromeFetchPlugin.fetch({ url: 'http://www.site.com/pageA' });
-    assert.strictEqual('httpA', TestUtils.stripChromeExtraTags(content));
+    assert.strictEqual('httpA', TestUtils.stripChromeExtraTags(content.toString()));
 
     assert.strictEqual(1, (await chromeFetchPlugin.browser.pages()).length);
   });
