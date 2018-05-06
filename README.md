@@ -70,10 +70,11 @@
   * [Optional Plugins](#optional-plugins)
     * [PersistResourcePlugin](#persistresourceplugin)
     * [ChromeFetchPlugin](#chromefetchplugin)
+- [Logger](#logger)
+  * [Logger.setLogLevel(logLevel)](#loggersetloglevelloglevel)
+  * [Logger.setLogPaths(outputPath, errorPath)](#loggersetlogpathsoutputpath-errorpath)
+  * [Logger.getLogger(cls)](#loggergetloggercls)
 - [Additional Documentation](#additional-documentation)
-
-
-
 
 ## Getting Started
 
@@ -344,8 +345,8 @@ returns <Promise<[Resource]>>
 - `outputPath` &lt;string> path for the output log
 - `errorPath` &lt;string> path for the error log
 #### Logger.getLogger(cls)
-- `cls` &lt;string> class  / category to be appended on each log message. A log entry has the following elements: [LogLevel] [cls] [Date] [Message]. All console methods can be invoked: trace, debug, info, warn, error.
-
+- `cls` &lt;string> class  / category to be appended on each log message. A log entry has the following elements: [LogLevel] [Class] [Date] [Message]. All console methods can be invoked: trace, debug, info, warn, error.
+- returns <[Logger]>
 
 ## Additional Documentation
 Read the [full documentation](https://getsetfetch.org) for more details.
@@ -359,7 +360,7 @@ Read the [full documentation](https://getsetfetch.org) for more details.
 [ChromeFetchPlugin]: #chromefetchplugin "ChromeFetchPlugin"
 [NodeFetchPlugin]: #nodefetchplugin "NodeFetchPlugin"
 
-
+[Logger]: #logger  "Logger"
 
 
 
