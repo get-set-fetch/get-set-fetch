@@ -336,6 +336,17 @@ returns <Promise<[Resource]>>
 ```npm install puppeteer --save```
 
 
+## Logger
+
+#### Logger.setLogLevel(logLevel)
+- `logLevel` &lt;trace|debug|info|warn|error> set desired log level, levels below it will be ignored. Defaults to warn.
+#### Logger.setLogPaths(outputPath, errorPath)
+- `outputPath` &lt;string> path for the output log
+- `errorPath` &lt;string> path for the error log
+#### Logger.getLogger(cls)
+- `cls` &lt;string> class  / category to be appended on each log message. A log entry has the following elements: [LogLevel] [cls] [Date] [Message]. All console methods can be invoked: trace, debug, info, warn, error.
+
+
 ## Additional Documentation
 Read the [full documentation](https://getsetfetch.org) for more details.
 
