@@ -1,16 +1,11 @@
 const sinon = require('sinon');
 const nock = require('nock');
 
-const connections = gsfRequire('test/config/connections.json');
-const PluginManager = gsfRequire('lib/plugins/PluginManager');
-const Storage = gsfRequire('lib/storage/Storage');
-const GetSetFetch = gsfRequire('lib/index.js');
-
-
-connections.forEach((conn) => {
+function testSiteCrawl(GetSetFetch, Storage, conn) {
   describe(`Test Site Crawl, using connection ${conn.info}`, () => {
     let Site = null;
     let Resource = null;
+    const { PluginManager } = GetSetFetch;
 
     before(async () => {
       ({ Site, Resource } = await Storage.init(conn));
@@ -245,4 +240,6 @@ connections.forEach((conn) => {
       sinon.assert.callCount(crawlResourceSpy, 7);
     });
   });
-});
+}
+
+module.exports = testSiteCrawl;

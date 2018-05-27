@@ -1,9 +1,6 @@
-require('chai/register-assert');
+const { assert } = require('chai');
 
-const connections = gsfRequire('test/config/connections.json');
-const Storage = gsfRequire('lib/storage/Storage');
-
-connections.forEach((conn) => {
+function testResourceCrud(GetSetFetch, Storage, conn) {
   describe(`Test Storage Resource - CRUD, using connection ${conn.info}`, () => {
     let Site = null;
     let Resource = null;
@@ -18,11 +15,13 @@ connections.forEach((conn) => {
 
     before(async () => {
       ({ Site, Resource } = await Storage.init(conn));
+
       await Site.delAll();
       const site = new Site('siteA', 'http://siteA');
       await site.save();
       expectedResource.siteId = site.id;
     });
+
 
     beforeEach(async () => {
       // cleanup
@@ -69,6 +68,7 @@ connections.forEach((conn) => {
       updateResource.info = { propA: 'valA_changed' };
       updateResource.content = 'contentA_changed';
       await updateResource.update();
+      updateResource.content = 'contentA_changed1';
 
       // get and compare
       const getResource = await Resource.get(expectedResource.id);
@@ -101,4 +101,6 @@ connections.forEach((conn) => {
       assert.isNull(getResource);
     });
   });
-});
+}
+
+module.exports = testResourceCrud;

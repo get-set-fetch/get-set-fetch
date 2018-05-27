@@ -1,9 +1,6 @@
 require('chai/register-assert');
 
-const connections = gsfRequire('test/config/connections.json');
-const Storage = gsfRequire('lib/storage/Storage');
-
-connections.forEach((conn) => {
+function testResourceCrawl(GetSetFetch, Storage, conn, ResourceFncs) {
   describe(`Test Storage Resource - Crawl, using connection ${conn.info}`, () => {
     let Site = null;
     let Resource = null;
@@ -25,58 +22,6 @@ connections.forEach((conn) => {
       await Storage.close();
     });
 
-    function updateCrawledAt(resourceId, deltaHours) {
-      if (Resource.knex) {
-        const dbClient = Resource.knex.client.config.client;
-        let rawTimeQuery = null;
-        switch (dbClient) {
-          case 'mysql':
-          case 'pg':
-            rawTimeQuery = Resource.knex.raw(`NOW() - INTERVAL '${deltaHours}' HOUR`);
-            break;
-          case 'sqlite3':
-            rawTimeQuery = Resource.knex.raw(`datetime('now','-${deltaHours} hour')`);
-            break;
-          default:
-            rawTimeQuery = null;
-        }
-
-        return rawTimeQuery ? Resource.builder.where('id', resourceId).update('crawledAt', rawTimeQuery) : null;
-      }
-
-      if (Resource.mongo) {
-        return Resource.builder.update(
-          { _id: resourceId },
-          {
-            $set: {
-              crawledAt: new Date(Date.now() - (deltaHours * 60 * 60 * 1000)),
-            },
-          },
-        );
-      }
-
-      return null;
-    }
-
-    function resetCrawlInProgress(resourceId) {
-      if (Resource.knex) {
-        return Resource.builder.where('id', resourceId)
-          .update({ crawlInProgress: false });
-      }
-
-      if (Resource.mongo) {
-        return Resource.builder.update(
-          { _id: resourceId },
-          {
-            $set: {
-              crawlInProgress: false,
-            },
-          },
-        );
-      }
-
-      return null;
-    }
 
     it('getResourceToCrawl without crawlFrequency', async () => {
       const resourceUrl = 'http://siteA/resourceA';
@@ -88,7 +33,7 @@ connections.forEach((conn) => {
       // getResourceToCrawl returns a resource with a crawledAt value of null
       let notCrawledResource = await Resource.getResourceToCrawl(site.id);
       assert.strictEqual(notCrawledResource.url, resourceUrl);
-      assert.isNull(notCrawledResource.crawledAt);
+      ResourceFncs.checkInitialCrawledAt(notCrawledResource.crawledAt);
 
       // mark the resource as crawled
       await resource.update();
@@ -108,31 +53,33 @@ connections.forEach((conn) => {
       // getResourceToCrawl returns resource with a crawledAt value of null
       const notCrawledResource = await Resource.getResourceToCrawl(site.id, 1);
       assert.strictEqual(notCrawledResource.url, resourceUrl);
-      assert.isNull(notCrawledResource.crawledAt);
+      ResourceFncs.checkInitialCrawledAt(notCrawledResource.crawledAt);
 
       // how many hours ago was the last crawl
       const deltaHours = 2;
 
       // update crawlAt value and re-fetch the resource
-      await updateCrawledAt(resource.id, deltaHours);
+      await ResourceFncs.updateCrawledAt(Resource, resource.id, deltaHours);
       resource = await Resource.get(resource.id);
 
       // getResourceToCrawl returns an expired resource
-      await resetCrawlInProgress(resource.id);
+      await ResourceFncs.resetCrawlInProgress(Resource, resource.id);
       let expiredResource = await Resource.getResourceToCrawl(site.id, deltaHours - 1);
       assert.strictEqual(expiredResource.url, resourceUrl);
       assert.deepEqual(expiredResource.crawledAt, resource.crawledAt);
 
       // getResourceToCrawl returns an expired resource
-      await resetCrawlInProgress(resource.id);
+      await ResourceFncs.resetCrawlInProgress(Resource, resource.id);
       expiredResource = await Resource.getResourceToCrawl(site.id, deltaHours);
       assert.strictEqual(expiredResource.url, resourceUrl);
       assert.deepEqual(expiredResource.crawledAt, resource.crawledAt);
 
       // getResourceToCrawl returns null, there are no crawled and expired resources
-      await resetCrawlInProgress(resource.id);
+      await ResourceFncs.resetCrawlInProgress(Resource, resource.id);
       expiredResource = await Resource.getResourceToCrawl(site.id, deltaHours + 1);
       assert.isNull(expiredResource);
     });
   });
-});
+}
+
+module.exports = testResourceCrawl;

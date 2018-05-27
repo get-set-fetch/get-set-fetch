@@ -1,15 +1,11 @@
 require('chai/register-assert');
 
-const connections = gsfRequire('test/config/connections.json');
-const Storage = gsfRequire('lib/storage/Storage');
-const BasePlugin = gsfRequire('lib/plugins/base/BasePlugin');
-const PluginManager = gsfRequire('lib/plugins/PluginManager');
-const GetSetFetch = gsfRequire('lib/index.js');
-
-connections.forEach((conn) => {
+function testSitePluginsCrud(GetSetFetch, Storage, conn) {
   describe(`Test Storage Site Plugins - CRUD, using connection ${conn.info}`, () => {
     let Site = null;
     let site = null;
+    const { PluginManager } = GetSetFetch;
+    const { BasePlugin } = GetSetFetch.plugins;
 
     before(async () => {
       ({ Site } = await Storage.init(conn));
@@ -117,4 +113,6 @@ connections.forEach((conn) => {
       assert.strictEqual(5, siteById.getPlugins().length);
     });
   });
-});
+}
+
+module.exports = testSitePluginsCrud;

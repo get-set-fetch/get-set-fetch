@@ -1,9 +1,6 @@
-require('chai/register-assert');
+const { assert } = require('chai');
 
-const connections = gsfRequire('test/config/connections.json');
-const Storage = gsfRequire('lib/storage/Storage');
-
-connections.forEach((conn) => {
+function testSiteCrud(GetSetFetch, Storage, conn) {
   describe(`Test Storage Site - CRUD, using connection ${conn.info}`, () => {
     let Site = null;
     const expectedSite = {
@@ -75,4 +72,6 @@ connections.forEach((conn) => {
       assert.isNull(getSite);
     });
   });
-});
+}
+
+module.exports = testSiteCrud;
