@@ -1,6 +1,6 @@
 const URL = require('url');
 
-const GetSetFetch = gsfRequire('lib/index.js');
+const GetSetFetch = require('../../lib/index.js');
 
 // ChromeFetchPlugin options
 const chromeTestOpts = {

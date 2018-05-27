@@ -5,7 +5,7 @@ const path = require('path');
 const connections = gsfRequire('test/config/connections.json');
 const pluginConfigs = gsfRequire('test/config/plugin-configurations');
 const TestUtils = gsfRequire('test/utils/TestUtils');
-const GetSetFetch = gsfRequire('lib/index.js');
+const { Storage } = gsfRequire('lib/index.js');
 
 connections.forEach((conn) => {
   const pluginConfigurations = pluginConfigs.getPlugins();
@@ -28,7 +28,7 @@ connections.forEach((conn) => {
       let nockScopes = null;
 
       before(async () => {
-        ({ Site, Resource } = await GetSetFetch.init(conn));
+        ({ Site, Resource } = await Storage.init(conn));
       });
 
       beforeEach(async () => {
@@ -60,7 +60,7 @@ connections.forEach((conn) => {
 
       after(async () => {
         await site.cleanupPlugins();
-        await GetSetFetch.close();
+        await Storage.close();
       });
 
       it('crawl resource - index.html, 1st page, depth 0', async () => {

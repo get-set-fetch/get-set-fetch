@@ -5,7 +5,7 @@ const path = require('path');
 const connections = gsfRequire('test/config/connections.json');
 const pluginConfigs = gsfRequire('test/config/plugin-configurations');
 const TestUtils = gsfRequire('test/utils/TestUtils');
-const GetSetFetch = gsfRequire('lib/index.js');
+const { Storage, plugins } = gsfRequire('lib/index.js');
 
 connections.forEach((conn) => {
   const pluginConfigurations = pluginConfigs.getPlugins();
@@ -26,7 +26,7 @@ connections.forEach((conn) => {
       const targetDir = './test/tmp';
 
       before(async () => {
-        ({ Site, Resource } = await GetSetFetch.init(conn));
+        ({ Site, Resource } = await Storage.init(conn));
       });
 
       beforeEach(async () => {
@@ -61,7 +61,7 @@ connections.forEach((conn) => {
 
       after(async () => {
         await site.cleanupPlugins();
-        await GetSetFetch.close();
+        await Storage.close();
 
         /*
         tmp has .gitkeep file in order to create the tmp directory on git checkout
@@ -75,10 +75,10 @@ connections.forEach((conn) => {
         by default ExtractUrlPlugin only extracts html resources
         overide the default plugin instance with a new one containing suitable options
         */
-        site.addPlugins([new GetSetFetch.plugins.ExtractUrlPlugin({ extensionRe: /^(html|png)$/i })]);
+        site.addPlugins([new plugins.ExtractUrlPlugin({ extensionRe: /^(html|png)$/i })]);
 
         // add persistencePlugin to the current site
-        site.addPlugins([new GetSetFetch.plugins.PersistResourcePlugin({
+        site.addPlugins([new plugins.PersistResourcePlugin({
           target: targetDir,
           extensionRe: /^png$/i,
         })]);
@@ -108,10 +108,10 @@ connections.forEach((conn) => {
         by default ExtractUrlPlugin only extracts html resources
         overide the default plugin instance with a new one containing suitable options
         */
-        site.addPlugins([new GetSetFetch.plugins.ExtractUrlPlugin({ extensionRe: /^(html|png|gif|jpg)$/i })]);
+        site.addPlugins([new plugins.ExtractUrlPlugin({ extensionRe: /^(html|png|gif|jpg)$/i })]);
 
         // add persistencePlugin to the current site
-        site.addPlugins([new GetSetFetch.plugins.PersistResourcePlugin({
+        site.addPlugins([new plugins.PersistResourcePlugin({
           target: targetDir,
           extensionRe: /^(png|gif|jpg)$/i,
         })]);

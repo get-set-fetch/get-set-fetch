@@ -1,14 +1,18 @@
 require('chai/register-assert');
 const path = require('path');
 
-const connections = gsfRequire('test/config/connections.json');
+let connections = gsfRequire('test/config/connections.json');
 const pluginConfigs = gsfRequire('test/config/plugin-configurations');
 const TestUtils = gsfRequire('test/utils/TestUtils');
-const GetSetFetch = gsfRequire('lib/index.js');
-const { BasePlugin } = GetSetFetch.plugins;
+const { plugins, Storage } = gsfRequire('lib/index.js');
+const { BasePlugin } = plugins;
+
+connections = [connections[1]];
+
 
 connections.forEach((conn) => {
-  const pluginConfigurations = pluginConfigs.getPlugins();
+  let pluginConfigurations = pluginConfigs.getPlugins();
+  pluginConfigurations = [pluginConfigurations[0]];
   pluginConfigurations.forEach((pluginConf) => {
     describe('Test Scenario: extract html headers - all depths\n' +
       `using db connection: ${conn.info}\n` +
@@ -27,7 +31,7 @@ connections.forEach((conn) => {
           });
         }
 
-        ({ Site, Resource } = await GetSetFetch.init(conn));
+        ({ Site, Resource } = await Storage.init(conn));
       });
 
       beforeEach(async () => {
@@ -80,7 +84,7 @@ connections.forEach((conn) => {
 
       after(async () => {
         await site.cleanupPlugins();
-        await GetSetFetch.close();
+        await Storage.close();
       });
 
       it('extract html h1 elements into info property as json', async () => {
