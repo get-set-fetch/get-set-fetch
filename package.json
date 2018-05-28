@@ -17,7 +17,8 @@
     "url": "git+https://github.com/get-set-fetch/get-set-fetch.git"
   },
   "files": [
-    "lib/"
+    "lib/",
+    "test/external/"
   ],
   "engines": {
     "node": ">=7.10.1"
