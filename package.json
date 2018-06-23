@@ -7,8 +7,8 @@
     "clean": "rm -rf ./coverage",
     "lint": "eslint ./src ./test",
     "pretest": "docker-compose -f ./test/docker/docker-compose.yml up -d",
-    "test": "nyc --reporter=lcov mocha test --recursive --timeout 15000 --require ./test/utils/TestUtils.js",
-    "test:single": "mocha test --grep \"using persistence plugin\" --recursive --timeout 15000 --require ./test/utils/TestUtils.js",
+    "test": "nyc --reporter=lcov mocha test",
+    "test:single": "mocha test --grep \"using persistence plugin\"",
     "test:report": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "posttest": "docker-compose -f ./test/docker/docker-compose.yml down"
   },

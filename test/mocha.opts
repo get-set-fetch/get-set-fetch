@@ -1,0 +1,4 @@
+--recursive 
+--timeout 15000
+--require test/utils/TestUtils.js
+--require test/config/gsf-require.js
