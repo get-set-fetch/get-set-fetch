@@ -18,7 +18,8 @@
   },
   "files": [
     "lib/",
-    "test/external/"
+    "test/external/",
+    "test/utils/"
   ],
   "engines": {
     "node": ">=7.10.1"
