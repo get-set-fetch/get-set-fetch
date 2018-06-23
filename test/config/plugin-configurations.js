@@ -1,4 +1,4 @@
-const URL = require('url');
+const URL = require('url-parse');
 
 const GetSetFetch = require('../../lib/index.js');
 
@@ -16,16 +16,15 @@ const chromeTestOpts = {
     // add intercept to TestUtils
     requestInterception: true,
     requestInterceptFnc: async (request) => {
-      const urlObj = URL.parse(request.url());
+      const urlObj = new URL(request.url());
 
       // add urlObj props to http|https request options
-      const reqOpts = (
-        ({
-          protocol, host, hostname, port, path,
-        }) => ({
-          protocol, host, hostname, port, path,
-        })
-      )(urlObj);
+      const reqOpts = {
+        protocol: urlObj.protocol,
+        host: urlObj.host,
+        port: urlObj.port,
+        path: urlObj.pathname,
+      };
 
       reqOpts.headers = request.headers();
       const lib = reqOpts.protocol === 'https:' ? require('https') : require('http');

@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "jsdom": "^11.7.0",
-    "murmurhash-js": "^1.0.0"
+    "murmurhash-js": "^1.0.0",
+    "url-parse": "^1.4.1"
   }
 }
