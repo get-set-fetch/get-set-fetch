@@ -38,6 +38,9 @@ function testResourceCrawl(GetSetFetch, PluginManager, Storage, conn, ResourceFn
       // mark the resource as crawled
       await resource.update();
 
+      // check crawlInProgress flag
+      assert.strictEqual(false, resource.crawlInProgress);
+
       // getResourceToCrawl finds no resource with crawledAt value of null
       notCrawledResource = await Resource.getResourceToCrawl(site.id);
       assert.isNull(notCrawledResource);
