@@ -1,11 +1,10 @@
 const sinon = require('sinon');
 const nock = require('nock');
 
-function testSiteCrawl(GetSetFetch, Storage, conn) {
+function testSiteCrawl(GetSetFetch, PluginManager, Storage, conn) {
   describe(`Test Site Crawl, using connection ${conn.info}`, () => {
     let Site = null;
     let Resource = null;
-    const { PluginManager } = GetSetFetch;
 
     before(async () => {
       ({ Site, Resource } = await Storage.init(conn));

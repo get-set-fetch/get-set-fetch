@@ -1,10 +1,9 @@
 require('chai/register-assert');
 
-function testSitePluginsCrud(GetSetFetch, Storage, conn) {
+function testSitePluginsCrud(GetSetFetch, PluginManager, Storage, conn) {
   describe(`Test Storage Site Plugins - CRUD, using connection ${conn.info}`, () => {
     let Site = null;
     let site = null;
-    const { PluginManager } = GetSetFetch;
     const { BasePlugin } = GetSetFetch.plugins;
 
     before(async () => {
@@ -32,7 +31,7 @@ function testSitePluginsCrud(GetSetFetch, Storage, conn) {
       const siteById = await Site.get('siteA');
 
       // check number of default saved plugins
-      assert.strictEqual(7, siteById.getPlugins().length);
+      assert.strictEqual(PluginManager.DEFAULT_PLUGINS.length, siteById.getPlugins().length);
 
       // check if plugins json content has been correctly transformed to plugin instances
       const expectedPluginNames = PluginManager.DEFAULT_PLUGINS.map(plugin => plugin.constructor.name);
@@ -77,10 +76,10 @@ function testSitePluginsCrud(GetSetFetch, Storage, conn) {
       // add valid plugins
       siteById.addPlugins([
         new GetSetFetch.plugins.PersistResourcePlugin(),
-        new GetSetFetch.plugins.NodeFetchPlugin(),
+        new GetSetFetch.plugins.SelectResourcePlugin(),
       ]);
-      // 7 default plugins + 1 new one, NodeFetchPlugin just replaces the existing instance
-      assert.strictEqual(8, siteById.getPlugins().length);
+      // 7 default plugins + 1 new one, SelectResourcePlugin just replaces the existing instance
+      assert.strictEqual(PluginManager.DEFAULT_PLUGINS.length + 1, siteById.getPlugins().length);
       const expectedPluginNames = PluginManager.DEFAULT_PLUGINS.map(plugin => plugin.constructor.name);
       expectedPluginNames.push('PersistResourcePlugin');
       siteById.getPlugins().forEach((pluginInstance) => {
@@ -107,10 +106,10 @@ function testSitePluginsCrud(GetSetFetch, Storage, conn) {
       // remove plugins
       siteById.removePlugins([
         GetSetFetch.plugins.SelectResourcePlugin.name,
-        GetSetFetch.plugins.NodeFetchPlugin.name,
+        GetSetFetch.plugins.UpdateResourcePlugin.name,
       ]);
       // 7 default plugins -2 removed
-      assert.strictEqual(5, siteById.getPlugins().length);
+      assert.strictEqual(PluginManager.DEFAULT_PLUGINS.length - 2, siteById.getPlugins().length);
     });
   });
 }

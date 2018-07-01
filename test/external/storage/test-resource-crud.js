@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 
-function testResourceCrud(GetSetFetch, Storage, conn) {
+function testResourceCrud(GetSetFetch, PluginManager, Storage, conn) {
   describe(`Test Storage Resource - CRUD, using connection ${conn.info}`, () => {
     let Site = null;
     let Resource = null;

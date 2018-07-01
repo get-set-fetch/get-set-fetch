@@ -1,5 +1,6 @@
 const MongoStorage = gsfRequire('lib/storage/mongo/MongoStorage');
 const GetSetFetch = gsfRequire('lib/index');
+const PluginManager = gsfRequire('lib/plugins/PluginManager');
 const ExternalStorageTests = gsfRequire('test/external/external-storage-tests');
 
 const conn = {
@@ -43,6 +44,6 @@ const ResourceFncs = {
 
 describe('Test Suite MongoDB Storage', () => {
   Object.values(ExternalStorageTests).forEach((suite) => {
-    suite(GetSetFetch, MongoStorage, conn, ResourceFncs);
+    suite(GetSetFetch, PluginManager, MongoStorage, conn, ResourceFncs);
   });
 });

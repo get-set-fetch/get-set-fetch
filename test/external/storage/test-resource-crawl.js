@@ -1,6 +1,6 @@
 require('chai/register-assert');
 
-function testResourceCrawl(GetSetFetch, Storage, conn, ResourceFncs) {
+function testResourceCrawl(GetSetFetch, PluginManager, Storage, conn, ResourceFncs) {
   describe(`Test Storage Resource - Crawl, using connection ${conn.info}`, () => {
     let Site = null;
     let Resource = null;

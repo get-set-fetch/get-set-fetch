@@ -1,5 +1,6 @@
 const KnexStorage = gsfRequire('lib/storage/knex/KnexStorage');
 const GetSetFetch = gsfRequire('lib/index');
+const PluginManager = gsfRequire('lib/plugins/PluginManager');
 const ExternalStorageTests = gsfRequire('test/external/external-storage-tests');
 
 const conn = {
@@ -35,6 +36,6 @@ const ResourceFncs = {
 
 describe('Test Suite Sqlite3 Storage', () => {
   Object.values(ExternalStorageTests).forEach((suite) => {
-    suite(GetSetFetch, KnexStorage, conn, ResourceFncs);
+    suite(GetSetFetch, PluginManager, KnexStorage, conn, ResourceFncs);
   });
 });
