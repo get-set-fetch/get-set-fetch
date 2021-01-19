@@ -1,6 +1,6 @@
 # Moved
 
-This module is obsoleted, a refactored version is available at [@get-set-fetch/scraper](https://github.com/get-set-fetch/scraper).
+This module is obsolete, a refactored version is available at [@get-set-fetch/scraper](https://github.com/get-set-fetch/scraper).
 
 <img src="https://get-set-fetch.github.io/get-set-fetch/logo.png">
 
