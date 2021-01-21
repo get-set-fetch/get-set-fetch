@@ -10,7 +10,9 @@
     "test": "nyc --reporter=lcov mocha test",
     "test:single": "mocha test --grep \"using persistence plugin\"",
     "test:report": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "posttest": "docker-compose -f ./test/docker/docker-compose.yml down"
+    "posttest": "docker-compose -f ./test/docker/docker-compose.yml down",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -58,6 +60,8 @@
   "dependencies": {
     "jsdom": "^11.7.0",
     "murmurhash-js": "^1.0.0",
-    "url-parse": "^1.4.1"
-  }
+    "url-parse": "^1.4.1",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
